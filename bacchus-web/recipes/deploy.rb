@@ -1,7 +1,7 @@
 directory  "/srv/www/"  do
     mode '0775'
     user 'deploy'
-    group 'www-data'
+    group 'apache'
     recursive true
     action :create
 end
