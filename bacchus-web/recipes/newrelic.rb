@@ -15,10 +15,6 @@ execute "what am i" do
     action :run
 end
 
-execute "install new relic via yum" do
-    command "yum -y install newrelic-sysmond"
-    action :run
-end
 
 execute "install new relic repo" do
     cwd '/tmp'
@@ -27,10 +23,10 @@ execute "install new relic repo" do
     action :run
 end
 
-#execute "install new relic via yum" do
-#    command "yum -y install newrelic-sysmond"
-#    action :run
-#end
+execute "install new relic via yum" do
+    command "yum -y install newrelic-sysmond"
+    action :run
+end
 
 execute "configure new relic" do
     command "nrsysmond-config --set license_key=221e63f2ee0ed178aac7c2e3de018e5f26febbe9"
