@@ -23,8 +23,6 @@ execute "install newrelic java agent (prep)" do
 end
 
 
-
-
 execute "install new relic repo" do
     cwd '/tmp'
 #    command "rm -rf /tmp/newrelic-repo-5-3.noarch.rpm && rm -rf /etc/yum.repos.d/newrelic.repo && yum -y remove newrelic-repo-5-3 newrelic-sysmond && rm -rf /etc/newrelic/* && aws s3 cp s3://freq-cb-repo/newrelic-repo-5-3.noarch.rpm . && rpm -Uvh /tmp/newrelic-repo-5-3.noarch.rpm"
