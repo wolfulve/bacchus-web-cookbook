@@ -15,6 +15,12 @@ execute "what am i" do
     action :run
 end
 
+execute "install newrelic java agent (prep)" do
+    cwd '/usr/share/tomcat7'
+    command "mkdir -p newrelic"
+    action :run
+end
+
 
 execute "install new relic repo" do
     cwd '/tmp'
