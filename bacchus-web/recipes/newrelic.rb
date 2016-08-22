@@ -17,7 +17,7 @@ end
 
 execute "install newrelic java agent (prep)" do
     cwd '/tmp'
-    command "aws s3 cp s3://elasticbeanstalk-us-west-2-227102987351/bacchus/newrelic-java-3.31.1.zip . && cd /usr/share/tomcat7 && mkdir -p newrelic && cd newrelic && unzip /tmp/newrelic-java-3.31.1.zip"
+    command "aws s3 cp s3://elasticbeanstalk-us-west-2-227102987351/bacchus/newrelic-java-3.31.1.zip /tmp && cd /usr/share/tomcat7 && unzip /tmp/newrelic-java-3.31.1.zip"
     action :run
 end
 
