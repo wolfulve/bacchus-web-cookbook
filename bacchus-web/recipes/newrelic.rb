@@ -17,7 +17,7 @@ end
 
 execute "install newrelic java agent (prep)" do
     cwd '/usr/share/tomcat7'
-    command "mkdir -p newrelic"
+    command "mkdir -p newrelic && aws s3 cp s3://elasticbeanstalk-us-west-2-227102987351/bacchus/newrelic-java-3.31.1.zip ."
     action :run
 end
 
