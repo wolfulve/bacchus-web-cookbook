@@ -11,7 +11,7 @@ ff02::3 ip6-allhosts
 
 # OpsWorks Layer State
 127.0.0.1 localhost localhost.localdomain
-127.0.1.1 <%= node[:opsworks][:stack][:name] + '-' + node[:opsworks][:instance][:hostname] %>.localdomain <%= node[:opsworks][:stack][:name] + '-' node[:opsworks][:instance][:hostname] %>
+127.0.1.1 <%= node[:opsworks][:stack][:name] + '-' + node[:opsworks][:instance][:hostname] %>.localdomain <%= node[:opsworks][:stack][:name] + '-' + node[:opsworks][:instance][:hostname] %>
 <% seen = [] -%>
 <% node[:opsworks][:layers].each do |layer_name, layer_config| -%>
 <% layer_config[:instances].each do |instance_name, instance_config| -%>
