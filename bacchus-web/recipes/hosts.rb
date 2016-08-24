@@ -11,3 +11,9 @@ template '/etc/hosts' do
     mode "0644"
     variables(:opsworks => node[:opsworks])
 end
+
+execute "set hostname" do
+    user 'root'
+    command "hostname test-stack3-java-app1"
+    action :run
+end
