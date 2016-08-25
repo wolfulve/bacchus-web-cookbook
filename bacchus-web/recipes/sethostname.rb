@@ -7,6 +7,6 @@
 
 execute "set hostname" do
     user 'root'
-    command "hostname test-stack3-java-app1"
+    command "hostname #{node[:opsworks][:stack][:name] + '-' + node[:opsworks][:instance][:hostname]}"
     action :run
 end
