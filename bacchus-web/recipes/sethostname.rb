@@ -7,6 +7,6 @@
 
 execute "set hostname" do
     user 'root'
-    command "hostname #{node[:opsworks][:stack][:name] + '-' + node[:opsworks][:instance][:hostname]}"
+    command "hostname #{node[:opsworks][:stack][:name] + '-' + node[:opsworks][:instance][:hostname] + 'xxx'}"
     action :run
 end
