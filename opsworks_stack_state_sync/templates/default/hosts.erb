@@ -16,9 +16,9 @@ ff02::3 ip6-allhosts
 <% node[:opsworks][:layers].each do |layer_name, layer_config| -%>
 <% layer_config[:instances].each do |instance_name, instance_config| -%>
 <% if !seen.include?(instance_name) && instance_config[:private_ip] -%>
-<%= Resolv.getaddress(instance_config[:private_ip]) %> <%= instance_name %>
+<%= Resolv.getaddress(instance_config[:private_ip]) %> <%= node[:opsworks][:stack][:name] + '-' + instance_name %>
 <% if instance_config[:ip] %>
-<%= Resolv.getaddress(instance_config[:ip]) %> <%= instance_name %>-ext
+<%= Resolv.getaddress(instance_config[:ip]) %> <%= node[:opsworks][:stack][:name] + '-' + instance_name %>-ext
 <% end %>
 <% seen << instance_name %>
 <% end -%>
