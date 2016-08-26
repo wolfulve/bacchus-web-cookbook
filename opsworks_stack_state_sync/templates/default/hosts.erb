@@ -11,14 +11,14 @@ ff02::3 ip6-allhosts
 
 # OpsWorks Layer State
 127.0.0.1 localhost localhost.localdomain
-127.0.1.1 <%= node[:opsworks][:stack][:name] + '-' + node[:opsworks][:instance][:hostname] %>.localdomain <%= node[:opsworks][:stack][:name] + '-' + node[:opsworks][:instance][:hostname] %>
+127.0.1.1 <%= node[:opsworks][:instance][:hostname] %>.localdomain <%= node[:opsworks][:stack][:name] + '-' + node[:opsworks][:instance][:hostname] %>
 <% seen = [] -%>
 <% node[:opsworks][:layers].each do |layer_name, layer_config| -%>
 <% layer_config[:instances].each do |instance_name, instance_config| -%>
 <% if !seen.include?(instance_name) && instance_config[:private_ip] -%>
-<%= Resolv.getaddress(instance_config[:private_ip]) %> <%= node[:opsworks][:stack][:name] + '-' + instance_name %>
+<%= Resolv.getaddress(instance_config[:private_ip]) %> <%= instance_name %>
 <% if instance_config[:ip] %>
-<%= Resolv.getaddress(instance_config[:ip]) %> <%= node[:opsworks][:stack][:name] + '-' + instance_name %>-ext
+<%= Resolv.getaddress(instance_config[:ip]) %> <%= instance_name %>-ext
 <% end %>
 <% seen << instance_name %>
 <% end -%>
