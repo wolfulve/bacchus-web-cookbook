@@ -24,8 +24,8 @@ end
 
 template "/usr/share/tomcat7/newrelic/newrelic.yml" do
     source "newrelic.yml.erb"
-    owner "newrelic"
-    group "newrelic"
+    owner "root"
+    group "root"
     mode 0644
 end
 
