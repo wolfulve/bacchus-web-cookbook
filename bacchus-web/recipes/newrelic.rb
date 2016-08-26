@@ -15,20 +15,30 @@ execute "what am i" do
     action :run
 end
 
-execute "install newrelic java agent (prep)" do
+#
+# todo: execute conditionally based on layer type, e.g., java-app, nodejs-app etc
+# start
+execute "fetch agent and unzip" do
     cwd '/tmp'
     package = 'newrelic-java.zip'
-    command "aws s3 cp s3://elasticbeanstalk-us-west-2-227102987351/bacchus/#{package} /tmp && cd /usr/share/tomcat7 && rm -rf newrelic && unzip -o /tmp/#{package}"
+    command "aws s3 cp s3://elasticbeanstalk-us-west-2-227102987351/bacchus/#{package} . && unzip -o #{package}"
     action :run
 end
 
-#template "/usr/share/tomcat7/newrelic/newrelic.yml" do
-#    source "newrelic.yml.erb"
-#    owner "root"
-#    group "root"
-#    mode 0644
+# set app name
+template "/tmp/newrelic/newrelic.yml" do
+    source "newrelic.yml.erb"
+    owner "root"
+    group "root"
+    mode 0644
+end
 #end
 
+execute "copy agent to tomcat base" do
+    cwd '/usr/share/tomcat7'
+    command "rm -rf newrelic && mv /tmp/newrelic ."
+    action :run
+end
 
 execute "install new relic repo" do
     cwd '/tmp'
