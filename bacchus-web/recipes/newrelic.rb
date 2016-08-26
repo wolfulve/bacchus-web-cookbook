@@ -17,7 +17,7 @@ end
 
 #
 # todo: execute conditionally based on layer type, e.g., java-app, nodejs-app etc
-# start
+# start agent install
 execute "fetch agent and unzip" do
     cwd '/tmp'
     package = 'newrelic-java.zip'
@@ -32,13 +32,14 @@ template "/tmp/newrelic/newrelic.yml" do
     group "root"
     mode 0644
 end
-#end
+
 
 execute "copy agent to tomcat base" do
     cwd '/usr/share/tomcat7'
     command "rm -rf newrelic && mv /tmp/newrelic ."
     action :run
 end
+# end agent install
 
 execute "install new relic repo" do
     cwd '/tmp'
