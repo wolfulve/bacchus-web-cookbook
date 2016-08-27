@@ -34,11 +34,11 @@ template "/tmp/newrelic/newrelic.yml" do
 end
 
 
-execute "copy agent to tomcat base" do
-    cwd '/usr/share/tomcat7'
-    command "rm -rf newrelic && mv /tmp/newrelic ."
-    action :run
-end
+#execute "copy agent to tomcat base" do
+#    cwd '/usr/share/tomcat7'
+#    command "rm -rf newrelic && mv /tmp/newrelic ."
+#    action :run
+#end
 # end agent install
 
 Chef::Log.info("**********The public IP address is: '#{node[:opsworks][:applications]}' '#{node[:deploy][:appshortname]}' **********")
