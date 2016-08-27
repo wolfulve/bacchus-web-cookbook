@@ -8,7 +8,13 @@
 #
 #
 
-Chef::Log.info("********** app name: '#{node[:deploy][:appshortname]}' **********")
+#Chef::Log.info("********** app name: '#{node[:deploy][:appshortname]}' **********")
+
+node[:deploy].each do |application, deploy|
+    if deploy[:application_type] == 'java'
+        Chef::Log.info("Deploying java application #{application}")
+    end
+end
 
 execute "copy agent to tomcat base" do
     cwd '/usr/share/tomcat7'
