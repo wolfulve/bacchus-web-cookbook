@@ -42,7 +42,7 @@ end
 # end agent install
 
 log 'message' do
-    message '************************ A message add to the log.'
+    message '************************ A message add to the log. #{node[:opsworks][:instance][:instance_type]}'
     level :info
 end
 
