@@ -41,8 +41,10 @@ execute "copy agent to tomcat base" do
 end
 # end agent install
 
+Chef::Log.info("**********The public IP address is: '#{node[:opsworks][:instance][:instance_type]}' **********")
+
 log 'message' do
-    message '************************ A message add to the log. #{node[:opsworks][:instance][:instance_type]}'
+    message '************************ A message add to the log.'
     level :info
 end
 
