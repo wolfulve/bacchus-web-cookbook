@@ -29,7 +29,7 @@ end
 # set app name
 template "/tmp/newrelic/newrelic.yml" do
     variables {
-        :appName => 'zookeeper'
+        :myVars => 'zookeeper'
     }
 #    variables ( :a => 'Hello', :b => 'World', :c => 'Ololo' )
     source "newrelic.yml.erb"
