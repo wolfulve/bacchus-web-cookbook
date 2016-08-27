@@ -12,7 +12,7 @@
 
 node[:deploy].each do |application, deploy|
     if deploy[:application_type] == 'java'
-        Chef::Log.info("Deploying java application #{application}")
+        Chef::Log.info("******** Deploying java application #{application}")
     end
 end
 
@@ -28,6 +28,10 @@ end
 
 # set app name
 template "/tmp/newrelic/newrelic.yml" do
+    variables {
+        :appName => 'zookeeper'
+    }
+#    variables ( :a => 'Hello', :b => 'World', :c => 'Ololo' )
     source "newrelic.yml.erb"
     owner "root"
     group "root"
