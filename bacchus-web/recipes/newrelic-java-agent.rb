@@ -28,7 +28,8 @@ end
 #    action :run
 #end
 
-remote_file '/tmp/newrelic-java.zip' do
+# tmp until I get access to upload S3/freq-cb-repo
+remote_file '/tmp/newrelic-java-3-31.1.zip' do
     source 'http://www.bacchus.com/downloads//newrelic-java-3.31.1.zip'
     owner 'root'
     group 'root'
@@ -38,7 +39,7 @@ end
 
 execute "unzip" do
     cwd '/tmp'
-    package = 'newrelic-java.zip'
+    package = 'newrelic-java-3-31.1.zip'
     command "unzip -o #{package}"
     action :run
 end
