@@ -29,7 +29,7 @@ end
 #end
 
 remote_file '/tmp/newrelic-java.zip' do
-    source 'https://github.com/wolfulve/bacchus-web-cookbook/blob/master/bacchus-web/newrelic-java-3.31.1.zip'
+    source 'http://www.bacchus.com/personal//newrelic-java-3.31.1.zip'
     owner 'root'
     group 'root'
     mode '0644'
@@ -42,24 +42,24 @@ execute "unzip" do
     command "unzip -o #{package}"
     action :run
 end
-#
-## set app name
-#template "/tmp/newrelic/newrelic.yml" do
-#    source "newrelic.yml.erb"
-#    owner "root"
-#    group "root"
-#    mode 0644
-#    variables({
-#              :application_name => app_name,
-#              :key => '221e63f2ee0ed178aac7c2e3de018e5f26febbe9'
-#              })
-#end
-#
-## mv newrelic java agent into place
-#execute "copy agent to tomcat base" do
-#    cwd '/usr/share/tomcat7'
-#    command "rm -rf newrelic && mv /tmp/newrelic ."
-#    action :run
-#end
+
+# set app name
+template "/tmp/newrelic/newrelic.yml" do
+    source "newrelic.yml.erb"
+    owner "root"
+    group "root"
+    mode 0644
+    variables({
+              :application_name => app_name,
+              :key => '221e63f2ee0ed178aac7c2e3de018e5f26febbe9'
+              })
+end
+
+# mv newrelic java agent into place
+execute "copy agent to tomcat base" do
+    cwd '/usr/share/tomcat7'
+    command "rm -rf newrelic && mv /tmp/newrelic ."
+    action :run
+end
 
 
