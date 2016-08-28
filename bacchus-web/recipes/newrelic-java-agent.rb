@@ -36,30 +36,30 @@ remote_file '/tmp/newrelic-java.zip' do
     action :create
 end
 
-execute "unzip" do
-    cwd '/tmp'
-    package = 'newrelic-java.zip'
-    command "unzip -o #{package}"
-    action :run
-end
-
-# set app name
-template "/tmp/newrelic/newrelic.yml" do
-    source "newrelic.yml.erb"
-    owner "root"
-    group "root"
-    mode 0644
-    variables({
-              :application_name => app_name,
-              :key => '221e63f2ee0ed178aac7c2e3de018e5f26febbe9'
-              })
-end
-
-# mv newrelic java agent into place
-execute "copy agent to tomcat base" do
-    cwd '/usr/share/tomcat7'
-    command "rm -rf newrelic && mv /tmp/newrelic ."
-    action :run
-end
+#execute "unzip" do
+#    cwd '/tmp'
+#    package = 'newrelic-java.zip'
+#    command "unzip -o #{package}"
+#    action :run
+#end
+#
+## set app name
+#template "/tmp/newrelic/newrelic.yml" do
+#    source "newrelic.yml.erb"
+#    owner "root"
+#    group "root"
+#    mode 0644
+#    variables({
+#              :application_name => app_name,
+#              :key => '221e63f2ee0ed178aac7c2e3de018e5f26febbe9'
+#              })
+#end
+#
+## mv newrelic java agent into place
+#execute "copy agent to tomcat base" do
+#    cwd '/usr/share/tomcat7'
+#    command "rm -rf newrelic && mv /tmp/newrelic ."
+#    action :run
+#end
 
 
