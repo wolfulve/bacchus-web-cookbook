@@ -10,9 +10,12 @@
 
 #Chef::Log.info("********** app name: '#{node[:deploy][:appshortname]}' **********")
 
+app_name
+
 node[:deploy].each do |application, deploy|
     if deploy[:application_type] == 'java'
         Chef::Log.info("******** Deploying java application #{application}")
+        app_name = #{application}
     end
 end
 
@@ -33,7 +36,7 @@ template "/tmp/newrelic/newrelic.yml" do
     group "root"
     mode 0644
     variables({
-              :application_name => 'myApp'
+              :application_name => app_name
               })
 end
 
