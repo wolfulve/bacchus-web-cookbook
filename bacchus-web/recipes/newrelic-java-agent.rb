@@ -29,7 +29,7 @@ end
 #end
 
 remote_file '/tmp/newrelic-java.zip' do
-    source 'http://github.com/wolfulve/bacchus-web-cookbook/blob/master/bacchus-web/newrelic-java-3.31.1.zip'
+    source 'https://github.com/wolfulve/bacchus-web-cookbook/blob/master/bacchus-web/newrelic-java-3.31.1.zip'
     owner 'root'
     group 'root'
     mode '0644'
