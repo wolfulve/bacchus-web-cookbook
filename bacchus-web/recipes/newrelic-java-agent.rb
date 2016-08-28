@@ -10,6 +10,9 @@
 
 app_name = ''
 
+# todo: Frequency only deploys 1 Java app per instance at this time, so this is ok for now
+# can generalize this later for other agents
+# this is run on "deploy" as we need to get the app name
 node[:deploy].each do |application, deploy|
     if deploy[:application_type] == 'java'
         Chef::Log.info("******** Deploying java application #{application}")
@@ -17,9 +20,6 @@ node[:deploy].each do |application, deploy|
     end
 end
 
-#
-# todo: execute conditionally based on layer type, e.g., java-app, nodejs-app etc
-# start agent install
 execute "fetch agent and unzip" do
     cwd '/tmp'
     package = 'newrelic-java.zip'
@@ -38,6 +38,7 @@ template "/tmp/newrelic/newrelic.yml" do
               })
 end
 
+# mv newrelic java agent into place
 execute "copy agent to tomcat base" do
     cwd '/usr/share/tomcat7'
     command "rm -rf newrelic && mv /tmp/newrelic ."
