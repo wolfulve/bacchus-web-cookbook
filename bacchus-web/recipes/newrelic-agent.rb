@@ -28,14 +28,13 @@ end
 
 # set app name
 template "/tmp/newrelic/newrelic.yml" do
-    variables({
-              :app_name => 'myApp'
-              })
-#    variables ( :a => 'Hello', :b => 'World', :c => 'Ololo' )
     source "newrelic.yml.erb"
     owner "root"
     group "root"
     mode 0644
+    variables({
+              :application_name => 'myApp'
+              })
 end
 
 execute "copy agent to tomcat base" do
