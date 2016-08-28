@@ -15,42 +15,8 @@ execute "what am i" do
     action :run
 end
 
-##
-## todo: execute conditionally based on layer type, e.g., java-app, nodejs-app etc
-## start agent install
-#execute "fetch agent and unzip" do
-#    cwd '/tmp'
-#    package = 'newrelic-java.zip'
-#    command "aws s3 cp s3://elasticbeanstalk-us-west-2-227102987351/bacchus/#{package} . && unzip -o #{package}"
-#    action :run
-#end
-#
-## set app name
-#template "/tmp/newrelic/newrelic.yml" do
-#    source "newrelic.yml.erb"
-#    owner "root"
-#    group "root"
-#    mode 0644
-#end
-
-
-#execute "copy agent to tomcat base" do
-#    cwd '/usr/share/tomcat7'
-#    command "rm -rf newrelic && mv /tmp/newrelic ."
-#    action :run
-#end
-# end agent install
-
-Chef::Log.info("**********The public IP address is: '#{node[:opsworks][:applications]}' '#{node[:deploy][:appshortname]}' **********")
-
-log 'message' do
-    message '************************ A message add to the log.'
-    level :info
-end
-
 execute "install new relic repo" do
     cwd '/tmp'
-#    command "rm -rf /tmp/newrelic-repo-5-3.noarch.rpm && rm -rf /etc/yum.repos.d/newrelic.repo && yum -y remove newrelic-repo-5-3 newrelic-sysmond && rm -rf /etc/newrelic/* && aws s3 cp s3://freq-cb-repo/newrelic-repo-5-3.noarch.rpm . && rpm -Uvh /tmp/newrelic-repo-5-3.noarch.rpm"
     command "rm -rf /tmp/newrelic-repo-5-3.noarch.rpm && rm -rf /etc/yum.repos.d/newrelic.repo && yum -y remove newrelic-repo-5-3 newrelic-sysmond && rm -rf /etc/newrelic/* && aws s3 cp s3://elasticbeanstalk-us-west-2-227102987351/bacchus/newrelic-repo-5-3.noarch.rpm . && rpm -Uvh /tmp/newrelic-repo-5-3.noarch.rpm"
     action :run
 end

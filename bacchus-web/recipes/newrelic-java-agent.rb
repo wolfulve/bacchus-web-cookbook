@@ -1,8 +1,8 @@
 #
 # Cookbook Name:: systems
-# Recipe:: newrelic
+# Recipe:: newrelic-java-agent
 #
-# Copyright (C) 2015 Frequency
+# Copyright (C) 2016 Frequency
 #
 # All rights reserved - Do Not Redistribute
 #
