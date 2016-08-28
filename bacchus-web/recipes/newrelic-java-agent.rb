@@ -1,3 +1,4 @@
+
 #
 # Cookbook Name:: systems
 # Recipe:: newrelic-java-agent
@@ -20,10 +21,25 @@ node[:deploy].each do |application, deploy|
     end
 end
 
-execute "fetch agent and unzip" do
+#execute "fetch agent and unzip" do
+#    cwd '/tmp'
+#    package = 'newrelic-java.zip'
+#    command "aws s3 cp s3://elasticbeanstalk-us-west-2-227102987351/bacchus/#{package} . && unzip -o #{package}"
+#    action :run
+#end
+
+remote_file '/tmp/newrelic-java.zip' do
+    source 'https://github.com/wolfulve/bacchus-web-cookbook/blob/master/bacchus-web/newrelic-java-3.31.1.zip'
+    owner 'root'
+    group 'root'
+    mode '0644'
+    action :create
+end
+
+execute "unzip" do
     cwd '/tmp'
     package = 'newrelic-java.zip'
-    command "aws s3 cp s3://elasticbeanstalk-us-west-2-227102987351/bacchus/#{package} . && unzip -o #{package}"
+    command "unzip -o #{package}"
     action :run
 end
 
