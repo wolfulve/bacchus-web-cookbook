@@ -8,9 +8,7 @@
 #
 #
 
-#Chef::Log.info("********** app name: '#{node[:deploy][:appshortname]}' **********")
-
-app_name
+app_name = ''
 
 node[:deploy].each do |application, deploy|
     if deploy[:application_type] == 'java'
