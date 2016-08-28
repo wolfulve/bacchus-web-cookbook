@@ -29,19 +29,19 @@ end
 #end
 
 remote_file '/tmp/newrelic-java.zip' do
-    source 'https://github.com/wolfulve/bacchus-web-cookbook/blob/master/bacchus-web/newrelic-java-3.31.1.zip'
+    source 'http://github.com/wolfulve/bacchus-web-cookbook/blob/master/bacchus-web/newrelic-java-3.31.1.zip'
     owner 'root'
     group 'root'
     mode '0644'
     action :create
 end
 
-#execute "unzip" do
-#    cwd '/tmp'
-#    package = 'newrelic-java.zip'
-#    command "unzip -o #{package}"
-#    action :run
-#end
+execute "unzip" do
+    cwd '/tmp'
+    package = 'newrelic-java.zip'
+    command "unzip -o #{package}"
+    action :run
+end
 #
 ## set app name
 #template "/tmp/newrelic/newrelic.yml" do
