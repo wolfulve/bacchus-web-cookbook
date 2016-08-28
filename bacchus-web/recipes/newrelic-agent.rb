@@ -13,7 +13,7 @@ app_name = ''
 node[:deploy].each do |application, deploy|
     if deploy[:application_type] == 'java'
         Chef::Log.info("******** Deploying java application #{application}")
-        app_name = application
+        app_name = node[:opsworks][:stack][:name] + '-' + application
     end
 end
 
