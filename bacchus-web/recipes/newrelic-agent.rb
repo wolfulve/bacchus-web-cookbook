@@ -34,7 +34,7 @@ template "/tmp/newrelic/newrelic.yml" do
     group "root"
     mode 0644
     variables({
-              :application_name => #{app_name}
+              :application_name => app_name
               })
 end
 
