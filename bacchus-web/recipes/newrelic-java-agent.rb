@@ -13,7 +13,7 @@ app_name = ''
 
 
 # get application name(s) newrelic allows up to 3
-['a','b',c',d'].each_with_index do |application, index|
+['a','b','c','d'].each_with_index do |application, index|
 #    if deploy[:application_type] == 'java'
         Chef::Log.info("******** Deploying java application: #{application}, app#: #{index+1}/#{node[:deploy].size}")
         if index < 3
