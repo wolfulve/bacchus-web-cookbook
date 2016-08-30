@@ -14,34 +14,18 @@ app_name = ''
 # todo: Frequency only deploys 1 Java app per instance at this time, so this is ok for now
 # can generalize this later for other agents
 # this is run on "deploy" as we need to get the app name
-node[:deploy].each do |application, deploy|
+node[:deploy].each_with_index do |application, deploy, idx|
     if deploy[:application_type] == 'java'
-        Chef::Log.info("******** Deploying java application #{application}")
+        Chef::Log.info("******** Deploying java application: #{application}, app#: #{idx+1}")
+#        Chef::Log.info("******** Deploying java application #{application}")
         app_name = node[:opsworks][:stack][:name] + '-' + application
     end
 end
 
-#execute "fetch agent and unzip" do
-#    cwd '/tmp'
-#    package = 'newrelic-java.zip'
-#    command "aws s3 cp s3://elasticbeanstalk-us-west-2-227102987351/bacchus/#{package} . && unzip -o #{package}"
-#    action :run
-#end
-
-# tmp until I get access to upload S3/freq-cb-repo
-# does this agent match java version of layer/tomcat?
-remote_file '/tmp/newrelic-java-3-31.1.zip' do
-    source 'http://www.bacchus.com/downloads//newrelic-java-3.31.1.zip'
-    owner 'root'
-    group 'root'
-    mode '0644'
-    action :create
-end
-
-execute "unzip" do
+execute "fetch agent and unzip" do
     cwd '/tmp'
     package = 'newrelic-java-3-31.1.zip'
-    command "unzip -o #{package}"
+    command "aws s3 cp s3://elasticbeanstalk-us-west-2-227102987351/bacchus/#{package} . && unzip -o #{package}"
     action :run
 end
 
