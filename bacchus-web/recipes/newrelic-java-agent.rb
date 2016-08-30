@@ -19,7 +19,7 @@ app_name = ''
         Chef::Log.info("******** Deploying java application: #{application}, app#: #{index+1}/#{node[:deploy].size}")
         if index < 3
             app_name = app_name + node[:opsworks][:stack][:name] + '-' + application
-            if ( index != ['a','b','c','d'].size-1 )
+            if ( index != ['a','b','c','d'].size-1 && index != 2 )
                 app_name = app_name + ";"
             end
         end
