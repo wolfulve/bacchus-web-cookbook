@@ -18,9 +18,9 @@ app_name = ''
 #    if deploy[:application_type] == 'java'
         Chef::Log.info("******** Deploying java application: #{application}, app#: #{index+1}/#{node[:deploy].size}")
         if index <= 3
-            app_name = node[:opsworks][:stack][:name] + '-' + application
+            app_name = app_name + node[:opsworks][:stack][:name] + '-' + application
             if ( index < node[:deploy].size-1 )
-                app_name.concat(";")
+                app_name = app_name + ";"
             end
         end
 #    end
