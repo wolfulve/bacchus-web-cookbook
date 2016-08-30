@@ -16,7 +16,7 @@ app_name = ''
 # this is run on "deploy" as we need to get the app name
 node[:deploy].each_with_index do |application, deploy, index|
     if deploy[:application_type] == 'java'
-        Chef::Log.info("******** Deploying java application: #{application}, app#: #{index+1}")
+        Chef::Log.info("******** Deploying java application: #{application}, app#: #{index}")
 #        Chef::Log.info("******** Deploying java application #{application}")
         app_name = node[:opsworks][:stack][:name] + '-' + application
     end
