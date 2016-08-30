@@ -14,8 +14,8 @@ app_name = ''
 # todo: Frequency only deploys 1 Java app per instance at this time, so this is ok for now
 # can generalize this later for other agents
 # this is run on "deploy" as we need to get the app name
-['a','b','c','d'].each_with_index do |(application, deploy), index|
-    if deploy[:application_type] == 'java'
+['a','b','c','d'].each_with_index do |application, index|
+#    if deploy[:application_type] == 'java'
         Chef::Log.info("******** Deploying java application: #{application}, app#: #{index+1}/#{node[:deploy].size}")
         if index <= 3
             app_name = node[:opsworks][:stack][:name] + '-' + application
@@ -23,7 +23,7 @@ app_name = ''
                 app_name.concat(";")
             end
         end
-    end
+#    end
 end
 
 execute "fetch agent and unzip" do
