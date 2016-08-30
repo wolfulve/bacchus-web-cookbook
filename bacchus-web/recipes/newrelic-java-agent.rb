@@ -16,7 +16,7 @@ app_name = ''
 # this is run on "deploy" as we need to get the app name
 node[:deploy].each_with_index do |(application, deploy), index|
     if deploy[:application_type] == 'java'
-        Chef::Log.info("******** Deploying java application: #{application}, app#: #{index}")
+        Chef::Log.info("******** Deploying java application: #{application}, app#: #{index+1}")
 #        Chef::Log.info("******** Deploying java application #{application}")
         app_name = node[:opsworks][:stack][:name] + '-' + application
     end
@@ -24,7 +24,7 @@ end
 
 execute "fetch agent and unzip" do
     cwd '/tmp'
-    package = 'newrelic-java-3-31.1.zip'
+    package = 'newrelic-java.zip'
     command "aws s3 cp s3://elasticbeanstalk-us-west-2-227102987351/bacchus/#{package} . && unzip -o #{package}"
     action :run
 end
