@@ -24,7 +24,7 @@ end
 
 execute "fetch agent and unzip" do
     cwd '/tmp'
-    package = 'newrelic-java-agent.zip'
+    package = 'newrelic-java-3.31.1.zip'
     command "aws s3 cp s3://elasticbeanstalk-us-west-2-227102987351/bacchus/#{package} . && unzip -o #{package}"
     action :run
 end
