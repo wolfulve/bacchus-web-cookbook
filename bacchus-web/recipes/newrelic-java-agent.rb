@@ -27,12 +27,12 @@ app_name.slice!(app_name.length-1,app_name.length)
 
 execute "fetch agent and unzip" do
     cwd '/tmp'
-    package = 'newrelic-java-3.31.1.zip'
+    package = 'newrelic-java-3.25.0.zip'
     command "aws s3 cp s3://elasticbeanstalk-us-west-2-227102987351/bacchus/#{package} . && unzip -o #{package}"
     action :run
 end
 
-# set app name
+# set app name & License Key
 template "/tmp/newrelic/newrelic.yml" do
     source "newrelic-java-agent.yml.erb"
     owner "root"
@@ -47,7 +47,7 @@ end
 # mv newrelic java agent into place
 execute "copy agent to tomcat base" do
     cwd '/usr/share/tomcat7'
-    command "rm -rf newrelic && mv /tmp/newrelic ."
+    command "rm -rf newrelic && mv /tmp/newrelic . && rm /tmp/newrelic-java.*.zip"
     action :run
 end
 
