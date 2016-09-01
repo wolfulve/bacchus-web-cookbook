@@ -47,7 +47,7 @@ end
 # mv newrelic java agent into place
 execute "copy agent to tomcat base" do
     cwd '/usr/share/tomcat7'
-    command "rm -rf newrelic && mv /tmp/newrelic . && rm /tmp/newrelic-java.*.zip"
+    command "rm -rf newrelic && mv /tmp/newrelic . && rm -rf /tmp/newrelic-java.*.zip"
     action :run
 end
 
