@@ -14,28 +14,28 @@ app_name = ''
 
 # get application name(s) newrelic allows up to 3
 
-Chef::Log.info("******** node[deploy]: #{node[:opsworks][:instance][:layers][0]} #{node[:opsworks][:instance][:layers].size}")
+#Chef::Log.info("******** node[deploy]: #{node[:opsworks][:instance][:layers][0]} #{node[:opsworks][:instance][:layers].size}")
 
 # this will not work as the iteration will show all apps across multiple layers/instances
 node[:deploy].each_with_index do |(application, deploy), index|
     if deploy[:application_type] == 'java'
         Chef::Log.info("******** Deploying java application: #{application} (#{index+1}/#{node[:deploy].size})")
-        Chef::Log.info("******** node[deploy]: #{deploy}")
+#        Chef::Log.info("******** node[deploy]: #{deploy}")
         if index < 3
             app_name = app_name + node[:opsworks][:stack][:name] + '-' + application + ';'
         end
+    else
+        Chef::Log.info("******** Deploying other application, type: #{deploy[:application_type]}")
     end
 end
 
-# remove trailing/last ';'
-app_name.slice!(app_name.length-1,app_name.length)
-
-app_name = node[:opsworks][:instance][:layers][0];
-
-Dir['/usr/share/tomcat7/webapps/*'].each do |file_name|
-#    Chef::Log.info("******** file: #{file_name} File.basename(file_name) #{default[:opsworks_java][:tomcat][:webapps_base_dir]}")
-    Chef::Log.info("******** file: #{file_name}")
-end
+#if app_name.length == 0
+##    feed and search have N custom layers
+#    app_name = node[:opsworks][:stack][:name] + '-' + node[:opsworks][:instance][:layers][0];
+#else
+#    # remove trailing/last ';'
+#    app_name.slice!(app_name.length-1,app_name.length)
+#end
 
 execute "fetch agent and unzip" do
     cwd '/tmp'
