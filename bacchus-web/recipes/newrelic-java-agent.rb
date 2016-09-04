@@ -11,12 +11,6 @@
 
 app_name = ''
 
-
-# get application name(s) newrelic allows up to 3
-
-#Chef::Log.info("******** node[deploy]: #{node[:opsworks][:instance][:layers][0]} #{node[:opsworks][:instance][:layers].size}")
-
-# this will not work as the iteration will show all apps across multiple layers/instances
 node[:deploy].each_with_index do |(application, deploy), index|
     Chef::Log.info("******** Application: #{application}, type: #{deploy[:application_type]} (#{index+1}/#{node[:deploy].size})")
     if deploy[:application_type] == 'java'
@@ -25,6 +19,11 @@ node[:deploy].each_with_index do |(application, deploy), index|
             app_name = app_name + node[:opsworks][:stack][:name] + '-' + application + ';'
         end
     end
+end
+
+# remove trailing/last ';'
+if app_name.length > 0
+    app_name.slice!(app_name.length-1,app_name.length)
 end
 
 execute "fetch agent and unzip" do
