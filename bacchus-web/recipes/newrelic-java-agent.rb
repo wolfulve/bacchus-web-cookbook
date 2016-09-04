@@ -18,24 +18,14 @@ app_name = ''
 
 # this will not work as the iteration will show all apps across multiple layers/instances
 node[:deploy].each_with_index do |(application, deploy), index|
+    Chef::Log.info("******** Application: #{application}, type: #{deploy[:application_type]} (#{index+1}/#{node[:deploy].size})")
     if deploy[:application_type] == 'java'
-        Chef::Log.info("******** Deploying java application: #{application} (#{index+1}/#{node[:deploy].size})")
-#        Chef::Log.info("******** node[deploy]: #{deploy}")
+        Chef::Log.info("******** Deploying java application: #{application}")
         if index < 3
             app_name = app_name + node[:opsworks][:stack][:name] + '-' + application + ';'
         end
-    else
-        Chef::Log.info("******** Deploying other application, type: #{deploy[:application_type]}")
     end
 end
-
-#if app_name.length == 0
-##    feed and search have N custom layers
-#    app_name = node[:opsworks][:stack][:name] + '-' + node[:opsworks][:instance][:layers][0];
-#else
-#    # remove trailing/last ';'
-#    app_name.slice!(app_name.length-1,app_name.length)
-#end
 
 execute "fetch agent and unzip" do
     cwd '/tmp'
