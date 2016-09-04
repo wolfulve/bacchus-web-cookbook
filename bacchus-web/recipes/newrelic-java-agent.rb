@@ -33,7 +33,8 @@ app_name.slice!(app_name.length-1,app_name.length)
 app_name = node[:opsworks][:instance][:layers][0];
 
 Dir['/usr/share/tomcat7/webapps/*'].each do |file_name|
-    Chef::Log.info("******** file: #{file_name} File.basename(file_name) #{default[:opsworks_java][:tomcat][:webapps_base_dir]}")
+#    Chef::Log.info("******** file: #{file_name} File.basename(file_name) #{default[:opsworks_java][:tomcat][:webapps_base_dir]}")
+    Chef::Log.info("******** file: #{file_name}")
 end
 
 execute "fetch agent and unzip" do
