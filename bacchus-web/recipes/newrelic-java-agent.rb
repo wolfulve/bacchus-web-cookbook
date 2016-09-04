@@ -16,9 +16,9 @@ app_name = ''
 
 
 
-Chef::Log.info("******** node[deploy]: #{node[:opsworks]}")
+Chef::Log.info("******** node[deploy]: #{node[:opsworks][:instance][:layers][0]}")
 
-// this will not work as the iteration will show all apps across multiple layers
+# this will not work as the iteration will show all apps across multiple layers
 node[:deploy].each_with_index do |(application, deploy), index|
     if deploy[:application_type] == 'java'
         Chef::Log.info("******** Deploying java application: #{application} (#{index+1}/#{node[:deploy].size})")
