@@ -14,11 +14,9 @@ app_name = ''
 
 # get application name(s) newrelic allows up to 3
 
+Chef::Log.info("******** node[deploy]: #{node[:opsworks][:instance][:layers][0]} #{node[:opsworks][:instance][:layers].size}")
 
-
-Chef::Log.info("******** node[deploy]: #{node[:opsworks][:instance][:layers][0]}")
-
-# this will not work as the iteration will show all apps across multiple layers
+# this will not work as the iteration will show all apps across multiple layers/instances
 node[:deploy].each_with_index do |(application, deploy), index|
     if deploy[:application_type] == 'java'
         Chef::Log.info("******** Deploying java application: #{application} (#{index+1}/#{node[:deploy].size})")
