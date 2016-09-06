@@ -10,13 +10,15 @@
 #
 
 app_name = ''
+count = 0
 
 node[:deploy].each_with_index do |(application, deploy), index|
     Chef::Log.info("******** Application: #{application}, type: #{deploy[:application_type]} (#{index+1}/#{node[:deploy].size})")
     if deploy[:application_type] == 'java'
         Chef::Log.info("******** Deploying java application: #{application}")
-        if index < 3
+        if count < 3
             app_name = app_name + node[:opsworks][:stack][:name] + '-' + application + ';'
+            count += 1
         end
     end
 end
