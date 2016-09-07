@@ -12,7 +12,7 @@
 app_name = ''
 count = 0
 
-node[:deploy].each_with_index do |(application, deploy), index|
+node["opsworks"]["applications"].each_with_index do |application, index|
     Chef::Log.info("******** Application: #{application}, type: #{deploy[:application_type]} (#{index+1}/#{node[:deploy].size})")
     if deploy[:application_type] == 'java'
         Chef::Log.info("******** Deploying java application: #{application}")
