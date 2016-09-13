@@ -47,6 +47,11 @@ execute "set new relic server policy (in-progress)" do
     action :run
 end
 
+json = File.read('/tmp/s-policy.json')
+obj = JSON.parse(json)
+
+Chef::Log.info("******** server JSON file: #{obj}")
+
 ruby_block "something" do
     block do
         #tricky way to load this Chef::Mixin::ShellOut utilities
