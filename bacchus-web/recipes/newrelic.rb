@@ -47,10 +47,12 @@ execute "set new relic server policy (in-progress)" do
     action :run
 end
 
+require 'json'
+
 json = File.read('/tmp/s-policy.json')
 obj = JSON.parse(json)
 
-#Chef::Log.info("******** server JSON file: #{obj} #{obj[:servers][0][:id]}")
+Chef::Log.info("******** server JSON file: #{obj} #{obj['servers'}")
 
 obj.each_with_index do |server, index|
     Chef::Log.info("******** Server: #{server[:id]})")
