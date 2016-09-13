@@ -50,7 +50,7 @@ end
 json = File.read('/tmp/s-policy.json')
 obj = JSON.parse(json)
 
-Chef::Log.info("******** server JSON file: #{obj}")
+Chef::Log.info("******** server JSON file: #{obj} #{obj[:servers][:id]}")
 
 ruby_block "something" do
     block do
