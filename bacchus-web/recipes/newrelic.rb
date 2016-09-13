@@ -41,3 +41,22 @@ end
 service "newrelic-sysmond" do
     action [:enable, :restart]
 end
+
+execute "set new relic server policy (in-progress)" do
+    command "curl -X GET 'https://api.newrelic.com/v2/servers.json' -H 'X-Api-Key:b45db701025ac3714fa93428a7d3f3fbf3f604abbe56a79' -d 'filter[name]=dev-freq-collection-blueberry' > /tmp/s-policy.json"
+    action :run
+end
+
+ruby_block "something" do
+    block do
+        #tricky way to load this Chef::Mixin::ShellOut utilities
+        Chef::Resource::RubyBlock.send(:include, Chef::Mixin::ShellOut)
+        command = "curl -X GET 'https://api.newrelic.com/v2/servers.json' -H 'X-Api-Key:b45db701025ac3714fa93428a7d3f3fbf3f604abbe56a79' -d 'filter[name]=dev-freq-collection-blueberry'"
+        command_out = shell_out(command)
+        node.set['abc'] = command_out.stdout
+    end
+    action :create
+end
+
+
+Chef::Log.info("******** server JSON: #{node[:abc]}")
