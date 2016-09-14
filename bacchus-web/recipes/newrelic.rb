@@ -45,6 +45,8 @@ service "newrelic-sysmond" do
     action [:enable, :restart]
 end
 
+Chef::Log.info("******** before CURls")
+
 execute "set new relic server policy (in-progress)" do
     command "curl -X GET 'https://api.newrelic.com/v2/servers.json' -H 'X-Api-Key:5209987e383b241f4958ff40652fb88dc69b81526febbe9' -d 'filter[name]=test-stack4-magic2' -o '/tmp/s-policy.json'"
     action :run
@@ -55,7 +57,16 @@ execute "set new relic server policy (in-progress)" do
     action :run
 end
 
+
+Chef::Log.info("******** after CURls")
+
+
+
+Chef::Log.info("******** before file read")
+
 json = File.read('/tmp/newrelic-server.json')
+
+Chef::Log.info("******** after file read")
 
 #require 'json'
 
