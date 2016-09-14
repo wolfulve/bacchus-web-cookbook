@@ -29,12 +29,14 @@ end
 
 require 'json'
 
-json = File.read('/tmp/newrelic-server.json')
-obj = JSON.parse(json)
-server_id = obj["servers"][0]["id"]
-server_name = obj["servers"][0]["name"]
+if File.file?('/tmp/newrelic-server.json')
+    json = File.read('/tmp/newrelic-server.json')
+    obj = JSON.parse(json)
+    server_id = obj["servers"][0]["id"]
+    server_name = obj["servers"][0]["name"]
 
-Chef::Log.info("******** Server Id: #{server_id} Name: #{server_name} #{obj} #{server_id}")
+    Chef::Log.info("******** Server Id: #{server_id} Name: #{server_name} #{obj} #{server_id}")
+end
 
 
 execute "install new relic repo" do
