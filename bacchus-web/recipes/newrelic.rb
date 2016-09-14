@@ -47,9 +47,8 @@ end
 
 require 'json'
 
-ruby_block "something" do
+ruby_block "add the server id to the associated policy list" do
     block do
-        #tricky way to load this Chef::Mixin::ShellOut utilities
         Chef::Resource::RubyBlock.send(:include, Chef::Mixin::ShellOut)
 #        command = "curl -X GET 'https://api.newrelic.com/v2/servers.json' -H 'X-Api-Key:b45db701025ac3714fa93428a7d3f3fbf3f604abbe56a79' -d 'filter[name]=dev-freq-collection-blueberry'"
         command = "curl -X GET 'https://api.newrelic.com/v2/servers.json' -H 'X-Api-Key:5209987e383b241f4958ff40652fb88dc69b81526febbe9' -d 'filter[name]=test-stack4-magic2'"
@@ -60,7 +59,7 @@ ruby_block "something" do
         server_name = obj["servers"][0]["name"]
         Chef::Log.info("******** Server Id: #{server_id} Name: #{server_name} #{obj} #{server_id}")
 #        get policy info ...
-        command = "curl -X GET 'https://api.newrelic.com/v2/alert_policies.json' -H 'X-Api-Key:5209987e383b241f4958ff40652fb88dc69b81526febbe9' -d 'filter[name]=test-stack4-magic2'"
+        command = "curl -X GET 'https://api.newrelic.com/v2/alert_policies.json' -H 'X-Api-Key:5209987e383b241f4958ff40652fb88dc69b81526febbe9' -d 'filter[name]=prd-freq-activity'"
         command_out = shell_out(command)
         json = command_out.stdout
         obj = JSON.parse(json)
@@ -69,18 +68,5 @@ ruby_block "something" do
     action :create
 end
 
-#ruby_block "something" do
-#    block do
-#        #tricky way to load this Chef::Mixin::ShellOut utilities
-#        Chef::Resource::RubyBlock.send(:include, Chef::Mixin::ShellOut)
-#        #        get policy for server
-#        command = "curl -X GET 'https://api.newrelic.com/v2/alert_policies.json' -H 'X-Api-Key:5209987e383b241f4958ff40652fb88dc69b81526febbe9' -d 'filter[name]=test-stack4-magic2'"
-#        command_out = shell_out(command)
-#        json = command_out.stdout
-#        obj = JSON.parse(json)
-#        Chef::Log.info("******** policies: #{obj}")
-#    end
-#    action :create
-#end
 
 
