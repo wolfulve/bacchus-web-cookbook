@@ -53,13 +53,12 @@ require 'json'
 
 json = File.read('/tmp/s-policy.json')
 obj = JSON.parse(json)
-myId = 0
-myId = obj["servers"][0]["id"]
+server_id = obj["servers"][0]["id"]
 
-Chef::Log.info("******** server JSON file: #{obj} #{myId}")
+Chef::Log.info("******** server JSON file: #{obj} #{server_id}")
 
 obj["servers"].each_with_index do |server, index|
-    Chef::Log.info("******** Server: #{server[:id]} #{server[:name]}")
+    Chef::Log.info("******** server data: #{server} #{server['id]'} #{server['name']}")
     myId = server[:id]
 end
 
