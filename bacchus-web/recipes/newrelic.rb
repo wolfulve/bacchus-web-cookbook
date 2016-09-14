@@ -54,8 +54,6 @@ ruby_block "something" do
 #        command = "curl -X GET 'https://api.newrelic.com/v2/servers.json' -H 'X-Api-Key:b45db701025ac3714fa93428a7d3f3fbf3f604abbe56a79' -d 'filter[name]=dev-freq-collection-blueberry'"
         command = "curl -X GET 'https://api.newrelic.com/v2/servers.json' -H 'X-Api-Key:5209987e383b241f4958ff40652fb88dc69b81526febbe9' -d 'filter[name]=test-stack4-magic2'"
         command_out = shell_out(command)
-#        node.set['xyz'] = command_out.stdout
-#        Chef::Log.info("******** nodeVal: #{node[:xyz]}")
         json = command_out.stdout
         obj = JSON.parse(json)
         server_id = obj["servers"][0]["id"]
@@ -71,7 +69,8 @@ ruby_block "something" do
         Chef::Resource::RubyBlock.send(:include, Chef::Mixin::ShellOut)
         #        get policy for server
         command = "curl -X GET 'https://api.newrelic.com/v2/alert_policies.json' -H 'X-Api-Key:5209987e383b241f4958ff40652fb88dc69b81526febbe9' -d 'filter[name]=test-stack4-magic2'"
-        json = shell_out(command)
+        command_out = shell_out(command)
+        json = command_out.stdout
         obj = JSON.parse(json)
         Chef::Log.info("******** policies: #{obj}")
     end
