@@ -57,28 +57,32 @@ ruby_block "add the server id to the associated policy list" do
         obj = JSON.parse(json)
 #       check to see if we got back a server
         Chef::Log.info("*** num servers: #{obj['servers'].size}")
+        server_id = -1
+        the_server = ''
         if obj["servers"].size > 0
             obj['servers'].each_with_index do |server, index|
                 Chef::Log.info("******** serverId: #{server['id']} #{server['name']}")
-            end
-            
-            
-            server_id = obj["servers"][0]["id"]
-            server_name = obj["servers"][0]["name"]
-            Chef::Log.info("******** New Relic Server Id: #{server_id} Name: #{server_name} #{node[:opsworks][:stack][:name]}")
-#           get policy info for specified policy name ...
-            command = "curl -X GET 'https://api.newrelic.com/v2/alert_policies.json' -H 'X-Api-Key:5209987e383b241f4958ff40652fb88dc69b81526febbe9' -d 'filter[name]=#{node[:opsworks][:stack][:name]}'"
-            command_out = shell_out(command)
-            json = command_out.stdout
-            obj = JSON.parse(json)
-#           does policy exist?
-            if obj['alert_policies'].size == 1
-                num_servers = obj['alert_policies'][0]['links']['servers'].size;
-                obj['alert_policies'][0]['links']['servers'].each_with_index do |server, index|
-                     Chef::Log.info("******** serverId: #{server}")
+                if server['name'] == node[:opsworks][:stack][:name]} + '-' + #{node[:opsworks][:instance][:hostname]
+                    server_id = server['id'];
                 end
-            else
-                Chef::Log.info("*** No Server Policy found for server: #{node[:opsworks][:stack][:name]}")
+            end
+            if server_id != -1
+                Chef::Log.info("******** serverId: #{server_id}")
+                
+    #           get policy info for specified policy name ...
+                command = "curl -X GET 'https://api.newrelic.com/v2/alert_policies.json' -H 'X-Api-Key:5209987e383b241f4958ff40652fb88dc69b81526febbe9' -d 'filter[name]=#{node[:opsworks][:stack][:name]}'"
+                command_out = shell_out(command)
+                json = command_out.stdout
+                obj = JSON.parse(json)
+    #           does policy exist?
+                if obj['alert_policies'].size == 1
+                    num_servers = obj['alert_policies'][0]['links']['servers'].size;
+                    obj['alert_policies'][0]['links']['servers'].each_with_index do |server, index|
+                         Chef::Log.info("******** serverId: #{server}")
+                    end
+                else
+                    Chef::Log.info("*** No Server Policy found for server: #{node[:opsworks][:stack][:name]}")
+                end
             end
         else
             Chef::Log.info("*** No matching server found for: #{node[:opsworks][:stack][:name]}")
