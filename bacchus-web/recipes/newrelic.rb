@@ -54,7 +54,7 @@ ruby_block "something" do
         command_out = shell_out(command)
         node.set['xyz'] = command_out.stdout
         Chef::Log.info("******** nodeVal: #{node[:xyz]}")
-        json = Fcommand_out.stdout
+        json = command_out.stdout
         obj = JSON.parse(json)
         server_id = obj["servers"][0]["id"]
         server_name = obj["servers"][0]["name"]
