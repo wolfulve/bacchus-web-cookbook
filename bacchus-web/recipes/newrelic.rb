@@ -55,7 +55,7 @@ obj = JSON.parse(json)
 #Chef::Log.info("******** server JSON file: #{obj} #{obj[:servers][0][:id]}")
 
 obj["servers"].each_with_index do |server, index|
-    Chef::Log.info("******** Server: #{server[:id]})")
+    Chef::Log.info("******** Server: #{server[:id]} #{server[:name]}")
 end
 
 ruby_block "something" do
