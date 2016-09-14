@@ -44,15 +44,21 @@ service "newrelic-sysmond" do
     action [:enable, :restart]
 end
 
+#execute "set new relic server policy (in-progress)" do
+##    command "curl -X GET 'https://api.newrelic.com/v2/servers.json' -H 'X-Api-Key:5209987e383b241f4958ff40652fb88dc69b81526febbe9' -d 'filter[name]=test-stack4-magic2' > /tmp/newrelic-server.json"
+#    command "curl -X GET 'https://api.newrelic.com/v2/servers.json' -H 'X-Api-Key:b45db701025ac3714fa93428a7d3f3fbf3f604abbe56a79' -d 'filter[name]=dev-freq-collection-blueberry' > /tmp/newrelic-server.json"
+#    action :run
+#end
+
 execute "set new relic server policy (in-progress)" do
-#    command "curl -X GET 'https://api.newrelic.com/v2/servers.json' -H 'X-Api-Key:5209987e383b241f4958ff40652fb88dc69b81526febbe9' -d 'filter[name]=test-stack4-magic2' > /tmp/newrelic-server.json"
-    command "curl -X GET 'https://api.newrelic.com/v2/servers.json' -H 'X-Api-Key:b45db701025ac3714fa93428a7d3f3fbf3f604abbe56a79' -d 'filter[name]=dev-freq-collection-blueberry' > /tmp/newrelic-server.json"
+    command "curl -X GET 'https://api.newrelic.com/v2/servers.json' -H 'X-Api-Key:b45db701025ac3714fa93428a7d3f3fbf3f604abbe56a79' -d 'filter[name]=dev-freq-collection-blueberry' > /tmp/s-policy.json"
     action :run
 end
 
+
 require 'json'
 
-json = File.read('/tmp/newrelic-server.json')
+json = File.read('/tmp/s-policy.json')
 obj = JSON.parse(json)
 server_id = obj["servers"][0]["id"]
 server_name = obj["servers"][0]["name"]
