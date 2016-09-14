@@ -55,24 +55,28 @@ ruby_block "add the server id to the associated policy list" do
         command_out = shell_out(command)
         json = command_out.stdout
         obj = JSON.parse(json)
-        server_id = obj["servers"][0]["id"]
-        server_name = obj["servers"][0]["name"]
-        Chef::Log.info("******** Server Id: #{server_id} Name: #{server_name} #{obj} #{server_id}")
-#        get policy info for specified policy name ...
-        command = "curl -X GET 'https://api.newrelic.com/v2/alert_policies.json' -H 'X-Api-Key:5209987e383b241f4958ff40652fb88dc69b81526febbe9' -d 'filter[name]=#{node[:opsworks][:stack][:name]}'"
-        command_out = shell_out(command)
-        json = command_out.stdout
-        obj = JSON.parse(json)
-#        does policy exist?
-        if obj['alert_policies'].size > 0
-            num_servers = obj['alert_policies'][0]['links']['servers'].size;
-            obj['alert_policies'][0]['links']['servers'].each_with_index do |server, index|
-                 Chef::Log.info("******** serverId: #{server}")
+#       check to see if we got back a server
+        if obj["servers"].size == 1
+            server_id = obj["servers"][0]["id"]
+            server_name = obj["servers"][0]["name"]
+            Chef::Log.info("******** New Relic Server Id: #{server_id} Name: #{server_name} #{node[:opsworks][:stack][:name]}")
+#           get policy info for specified policy name ...
+            command = "curl -X GET 'https://api.newrelic.com/v2/alert_policies.json' -H 'X-Api-Key:5209987e383b241f4958ff40652fb88dc69b81526febbe9' -d 'filter[name]=#{node[:opsworks][:stack][:name]}'"
+            command_out = shell_out(command)
+            json = command_out.stdout
+            obj = JSON.parse(json)
+#           does policy exist?
+            if obj['alert_policies'].size > 0
+                num_servers = obj['alert_policies'][0]['links']['servers'].size;
+                obj['alert_policies'][0]['links']['servers'].each_with_index do |server, index|
+                     Chef::Log.info("******** serverId: #{server}")
+                end
+            else
+                Chef::Log.info("*** No Server Policy found for server: #{node[:opsworks][:stack][:name]}")
             end
-           
+        else
+            Chef::Log.info("*** No matching server found for: #{node[:opsworks][:stack][:name]}")
         end
-#       add server id to list of servers
-#       post JSON back to newrelic
     end
     action :create
 end
