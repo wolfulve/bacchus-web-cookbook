@@ -29,7 +29,7 @@ end
 
 require 'json'
 
-sleep 2
+sleep 10
 
 #if File.file?('/tmp/newrelic-server.json')
     json = File.read('/tmp/newrelic-server.json')
