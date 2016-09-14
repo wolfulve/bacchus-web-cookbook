@@ -56,6 +56,7 @@ ruby_block "add the server id to the associated policy list" do
         json = command_out.stdout
         obj = JSON.parse(json)
 #       check to see if we got back a server
+        Chef::Log.info("*** num servers: #{obj['servers'].size}")
         if obj["servers"].size == 1
             server_id = obj["servers"][0]["id"]
             server_name = obj["servers"][0]["name"]
