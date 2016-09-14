@@ -57,12 +57,12 @@ server_id = obj["servers"][0]["id"]
 
 Chef::Log.info("******** server JSON file: #{obj} #{server_id}")
 
-obj["servers"].each_with_index do |server, index|
-    Chef::Log.info("******** server data: #{server} #{server['id]'} #{server['name']}")
-    myId = server[:id]
-end
+#obj["servers"].each_with_index do |server, index|
+#    Chef::Log.info("******** server data: #{server} #{server['id]'} #{server['name']}")
+#    myId = server[:id]
+#end
 
-Chef::Log.info("******** serverId: #{myId}")
+Chef::Log.info("******** serverId: #{server_id}")
 
 ruby_block "something" do
     block do
