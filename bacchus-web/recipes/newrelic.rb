@@ -57,7 +57,12 @@ ruby_block "add the server id to the associated policy list" do
         obj = JSON.parse(json)
 #       check to see if we got back a server
         Chef::Log.info("*** num servers: #{obj['servers'].size}")
-        if obj["servers"].size == 1
+        if obj["servers"].size > 0
+            obj['servers'].each_with_index do |server, index|
+                Chef::Log.info("******** serverId: #{server['id']} #{server['name']}")
+            end
+            
+            
             server_id = obj["servers"][0]["id"]
             server_name = obj["servers"][0]["name"]
             Chef::Log.info("******** New Relic Server Id: #{server_id} Name: #{server_name} #{node[:opsworks][:stack][:name]}")
@@ -67,7 +72,7 @@ ruby_block "add the server id to the associated policy list" do
             json = command_out.stdout
             obj = JSON.parse(json)
 #           does policy exist?
-            if obj['alert_policies'].size > 0
+            if obj['alert_policies'].size == 1
                 num_servers = obj['alert_policies'][0]['links']['servers'].size;
                 obj['alert_policies'][0]['links']['servers'].each_with_index do |server, index|
                      Chef::Log.info("******** serverId: #{server}")
