@@ -45,50 +45,20 @@ service "newrelic-sysmond" do
     action [:enable, :restart]
 end
 
-Chef::Log.info("******** before CURls")
-
-execute "set new relic server policy (in-progress)" do
-    command "curl -X GET 'https://api.newrelic.com/v2/servers.json' -H 'X-Api-Key:5209987e383b241f4958ff40652fb88dc69b81526febbe9' -d 'filter[name]=test-stack4-magic2' -o '/tmp/s-policy.json'"
-    action :run
-end
-
-execute "set new relic server policy (in-progress)" do
-    command "curl -X GET 'https://api.newrelic.com/v2/servers.json' -H 'X-Api-Key:b45db701025ac3714fa93428a7d3f3fbf3f604abbe56a79' -d 'filter[name]=dev-freq-collection-blueberry' -o '/tmp/newrelic-server.json'"
-    action :run
-end
-
-
-Chef::Log.info("******** after CURls")
-
-
-
-Chef::Log.info("******** before file read")
-
-#json = File.read('/tmp/newrelic-server.json')
-
-Chef::Log.info("******** after file read")
-
-#require 'json'
-
-#if File.file?('/tmp/newrelic-server.json')
-#    json = File.read('/tmp/newrelic-server.json')
-#    obj = JSON.parse(json)
-#    server_id = obj["servers"][0]["id"]
-#    server_name = obj["servers"][0]["name"]
-#    
-#    Chef::Log.info("******** Server Id: #{server_id} Name: #{server_name} #{obj} #{server_id}")
-#else
-#    Chef::Log.info("******** server file not written?")
-#end
-
 ruby_block "something" do
     block do
         #tricky way to load this Chef::Mixin::ShellOut utilities
         Chef::Resource::RubyBlock.send(:include, Chef::Mixin::ShellOut)
-        command = "curl -X GET 'https://api.newrelic.com/v2/servers.json' -H 'X-Api-Key:b45db701025ac3714fa93428a7d3f3fbf3f604abbe56a79' -d 'filter[name]=dev-freq-collection-blueberry'"
+#        command = "curl -X GET 'https://api.newrelic.com/v2/servers.json' -H 'X-Api-Key:b45db701025ac3714fa93428a7d3f3fbf3f604abbe56a79' -d 'filter[name]=dev-freq-collection-blueberry'"
+        command = "curl -X GET 'https://api.newrelic.com/v2/servers.json' -H 'X-Api-Key:5209987e383b241f4958ff40652fb88dc69b81526febbe9' -d 'filter[name]=test-stack4-magic2'"
         command_out = shell_out(command)
         node.set['xyz'] = command_out.stdout
         Chef::Log.info("******** nodeVal: #{node[:xyz]}")
+        json = Fcommand_out.stdout
+        obj = JSON.parse(json)
+        server_id = obj["servers"][0]["id"]
+        server_name = obj["servers"][0]["name"]
+        Chef::Log.info("******** Server Id: #{server_id} Name: #{server_name} #{obj} #{server_id}")
     end
     action :create
 end
