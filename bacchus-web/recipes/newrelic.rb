@@ -8,7 +8,7 @@
 #
 #
 
-myId
+
 
 execute "what am i" do
     time = Time.now.to_i
@@ -53,6 +53,7 @@ require 'json'
 
 json = File.read('/tmp/s-policy.json')
 obj = JSON.parse(json)
+myId = 0
 myId = obj["servers"][0]["id"]
 
 Chef::Log.info("******** server JSON file: #{obj} #{myId}")
