@@ -8,6 +8,8 @@
 #
 #
 
+myId
+
 execute "what am i" do
     time = Time.now.to_i
     cwd '/tmp'
@@ -51,9 +53,9 @@ require 'json'
 
 json = File.read('/tmp/s-policy.json')
 obj = JSON.parse(json)
-myId
+myId = obj["servers"][0]["id"]
 
-#Chef::Log.info("******** server JSON file: #{obj} #{obj[:servers][0][:id]}")
+Chef::Log.info("******** server JSON file: #{obj} #{myId}")
 
 obj["servers"].each_with_index do |server, index|
     Chef::Log.info("******** Server: #{server[:id]} #{server[:name]}")
