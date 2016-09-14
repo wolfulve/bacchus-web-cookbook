@@ -64,7 +64,7 @@ Chef::Log.info("******** after CURls")
 
 Chef::Log.info("******** before file read")
 
-json = File.read('/tmp/newrelic-server.json')
+#json = File.read('/tmp/newrelic-server.json')
 
 Chef::Log.info("******** after file read")
 
@@ -80,5 +80,17 @@ Chef::Log.info("******** after file read")
 #else
 #    Chef::Log.info("******** server file not written?")
 #end
+
+ruby_block "something" do
+    block do
+        #tricky way to load this Chef::Mixin::ShellOut utilities
+        Chef::Resource::RubyBlock.send(:include, Chef::Mixin::ShellOut)
+        command = 'cat /etc/hostname'
+        command_out = shell_out(command)
+        node.set['xyz'] = command_out.stdout
+        Chef::Log.info("******** server file not written? #{node[:xyz]}")
+    end
+    action :create
+end
 
 
