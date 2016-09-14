@@ -27,18 +27,6 @@ execute "set new relic server policy (in-progress)" do
     action :run
 end
 
-require 'json'
-
-sleep 10
-
-#if File.file?('/tmp/newrelic-server.json')
-    json = File.read('/tmp/newrelic-server.json')
-    obj = JSON.parse(json)
-    server_id = obj["servers"][0]["id"]
-    server_name = obj["servers"][0]["name"]
-
-    Chef::Log.info("******** Server Id: #{server_id} Name: #{server_name} #{obj} #{server_id}")
-#end
 
 
 execute "install new relic repo" do
@@ -74,3 +62,20 @@ end
 #    Chef::Log.info("******** server data: #{server} #{server['id]'} #{server['name']}")
 #    myId = server[:id]
 #end
+
+require 'json'
+
+sleep 10
+
+if File.file?('/tmp/newrelic-server.json')
+    json = File.read('/tmp/newrelic-server.json')
+    obj = JSON.parse(json)
+    server_id = obj["servers"][0]["id"]
+    server_name = obj["servers"][0]["name"]
+    
+    Chef::Log.info("******** Server Id: #{server_id} Name: #{server_name} #{obj} #{server_id}")
+    else
+    Chef::Log.info("******** server file not written?")
+end
+
+
