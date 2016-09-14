@@ -54,26 +54,11 @@ require 'json'
 json = File.read('/tmp/s-policy.json')
 obj = JSON.parse(json)
 server_id = obj["servers"][0]["id"]
+server_name = obj["servers"][0]["name"]
 
-Chef::Log.info("******** server JSON file: #{obj} #{server_id}")
+Chef::Log.info("******** server JSON file: #{server_id} #{server_name} #{obj} #{server_id}")
 
 #obj["servers"].each_with_index do |server, index|
 #    Chef::Log.info("******** server data: #{server} #{server['id]'} #{server['name']}")
 #    myId = server[:id]
 #end
-
-Chef::Log.info("******** serverId: #{server_id}")
-
-ruby_block "something" do
-    block do
-        #tricky way to load this Chef::Mixin::ShellOut utilities
-        Chef::Resource::RubyBlock.send(:include, Chef::Mixin::ShellOut)
-        command = "curl -X GET 'https://api.newrelic.com/v2/servers.json' -H 'X-Api-Key:b45db701025ac3714fa93428a7d3f3fbf3f604abbe56a79' -d 'filter[name]=dev-freq-collection-blueberry'"
-        command_out = shell_out(command)
-        node.set['abc'] = command_out.stdout
-    end
-    action :create
-end
-
-
-Chef::Log.info("******** server JSON: #{node[:abc]}")
