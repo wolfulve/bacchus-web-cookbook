@@ -62,7 +62,7 @@ ruby_block "add the server id to the associated policy list" do
         command = "curl -X GET 'https://api.newrelic.com/v2/alert_policies.json' -H 'X-Api-Key:5209987e383b241f4958ff40652fb88dc69b81526febbe9' -d 'filter[name]=#{node[:opsworks][:stack][:name]}'"
         command_out = shell_out(command)
         json = command_out.stdout
-        obj = JSON.parse(json)[0]
+        obj = JSON.parse(json)
         num_servers = obj['alert_policies'][0]['links'][0]['servers'].size;
         Chef::Log.info("******** policies: #{obj} #{num_servers}")
 #       add server id to list of servers
