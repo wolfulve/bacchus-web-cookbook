@@ -27,6 +27,15 @@ execute "set new relic server policy (in-progress)" do
     action :run
 end
 
+require 'json'
+
+json = File.read('/tmp/newrelic-server.json')
+obj = JSON.parse(json)
+server_id = obj["servers"][0]["id"]
+server_name = obj["servers"][0]["name"]
+
+Chef::Log.info("******** Server Id: #{server_id} Name: #{server_name} #{obj} #{server_id}")
+
 
 execute "install new relic repo" do
     cwd '/tmp'
@@ -56,15 +65,6 @@ service "newrelic-sysmond" do
 end
 
 
-
-#require 'json'
-#
-#json = File.read('/tmp/newrelic-server.json')
-#obj = JSON.parse(json)
-#server_id = obj["servers"][0]["id"]
-#server_name = obj["servers"][0]["name"]
-#
-#Chef::Log.info("******** Server Id: #{server_id} Name: #{server_name} #{obj} #{server_id}")
 
 #obj["servers"].each_with_index do |server, index|
 #    Chef::Log.info("******** server data: #{server} #{server['id]'} #{server['name']}")
