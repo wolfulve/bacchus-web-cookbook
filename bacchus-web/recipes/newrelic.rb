@@ -58,7 +58,6 @@ obj.each_with_index do |server, index|
     Chef::Log.info("******** Server: #{server[:id]})")
 end
 
-
 ruby_block "something" do
     block do
         #tricky way to load this Chef::Mixin::ShellOut utilities
