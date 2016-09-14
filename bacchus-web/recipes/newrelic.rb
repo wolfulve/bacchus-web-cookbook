@@ -63,7 +63,8 @@ ruby_block "add the server id to the associated policy list" do
         command_out = shell_out(command)
         json = command_out.stdout
         obj = JSON.parse(json)[0]
-        Chef::Log.info("******** policies: #{obj} #{obj['alert_policies'][0]['links'][0]['servers'].count}")
+        num_servers = obj['alert_policies'][0]['links'][0]['servers'].size;
+        Chef::Log.info("******** policies: #{obj} #{num_servers}")
 #       add server id to list of servers
 #       post JSON back to newrelic
     end
