@@ -58,13 +58,16 @@ ruby_block "add the server id to the associated policy list" do
         server_id = obj["servers"][0]["id"]
         server_name = obj["servers"][0]["name"]
         Chef::Log.info("******** Server Id: #{server_id} Name: #{server_name} #{obj} #{server_id}")
-#        get policy info ...
+#        get policy info for specified policy name ...
         command = "curl -X GET 'https://api.newrelic.com/v2/alert_policies.json' -H 'X-Api-Key:5209987e383b241f4958ff40652fb88dc69b81526febbe9' -d 'filter[name]=#{node[:opsworks][:stack][:name]}'"
         command_out = shell_out(command)
         json = command_out.stdout
         obj = JSON.parse(json)
-        num_servers = obj['alert_policies'][0]['links']['servers'].size;
-        Chef::Log.info("******** policies: #{obj} #{num_servers}")
+#        does olicy exist?
+        if obj['alert_policies'].size > 0
+            num_servers = obj['alert_policies'][0]['links']['servers'].size;
+            Chef::Log.info("******** policies: #{obj} #{num_servers}")
+        end
 #       add server id to list of servers
 #       post JSON back to newrelic
     end
