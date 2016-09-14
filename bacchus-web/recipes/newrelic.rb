@@ -17,17 +17,6 @@ execute "what am i" do
     action :run
 end
 
-execute "set new relic server policy (in-progress)" do
-    command "curl -X GET 'https://api.newrelic.com/v2/servers.json' -H 'X-Api-Key:5209987e383b241f4958ff40652fb88dc69b81526febbe9' -d 'filter[name]=test-stack4-magic2' -o '/tmp/s-policy.json'"
-    action :run
-end
-
-execute "set new relic server policy (in-progress)" do
-    command "curl -X GET 'https://api.newrelic.com/v2/servers.json' -H 'X-Api-Key:b45db701025ac3714fa93428a7d3f3fbf3f604abbe56a79' -d 'filter[name]=dev-freq-collection-blueberry' -o '/tmp/newrelic-server.json'"
-    action :run
-end
-
-
 
 execute "install new relic repo" do
     cwd '/tmp'
@@ -56,26 +45,29 @@ service "newrelic-sysmond" do
     action [:enable, :restart]
 end
 
-
-
-#obj["servers"].each_with_index do |server, index|
-#    Chef::Log.info("******** server data: #{server} #{server['id]'} #{server['name']}")
-#    myId = server[:id]
-#end
-
-require 'json'
-
-sleep 10
-
-if File.file?('/tmp/newrelic-server.json')
-    json = File.read('/tmp/newrelic-server.json')
-    obj = JSON.parse(json)
-    server_id = obj["servers"][0]["id"]
-    server_name = obj["servers"][0]["name"]
-    
-    Chef::Log.info("******** Server Id: #{server_id} Name: #{server_name} #{obj} #{server_id}")
-    else
-    Chef::Log.info("******** server file not written?")
+execute "set new relic server policy (in-progress)" do
+    command "curl -X GET 'https://api.newrelic.com/v2/servers.json' -H 'X-Api-Key:5209987e383b241f4958ff40652fb88dc69b81526febbe9' -d 'filter[name]=test-stack4-magic2' -o '/tmp/s-policy.json'"
+    action :run
 end
+
+execute "set new relic server policy (in-progress)" do
+    command "curl -X GET 'https://api.newrelic.com/v2/servers.json' -H 'X-Api-Key:b45db701025ac3714fa93428a7d3f3fbf3f604abbe56a79' -d 'filter[name]=dev-freq-collection-blueberry' -o '/tmp/newrelic-server.json'"
+    action :run
+end
+
+json = File.read('/tmp/newrelic-server.json')
+
+#require 'json'
+
+#if File.file?('/tmp/newrelic-server.json')
+#    json = File.read('/tmp/newrelic-server.json')
+#    obj = JSON.parse(json)
+#    server_id = obj["servers"][0]["id"]
+#    server_name = obj["servers"][0]["name"]
+#    
+#    Chef::Log.info("******** Server Id: #{server_id} Name: #{server_name} #{obj} #{server_id}")
+#else
+#    Chef::Log.info("******** server file not written?")
+#end
 
 
