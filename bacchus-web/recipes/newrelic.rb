@@ -29,6 +29,8 @@ end
 
 require 'json'
 
+sleep 2
+
 #if File.file?('/tmp/newrelic-server.json')
     json = File.read('/tmp/newrelic-server.json')
     obj = JSON.parse(json)
