@@ -51,7 +51,7 @@ ruby_block "add the server id to the associated policy list" do
     block do
         Chef::Resource::RubyBlock.send(:include, Chef::Mixin::ShellOut)
 #        command = "curl -X GET 'https://api.newrelic.com/v2/servers.json' -H 'X-Api-Key:b45db701025ac3714fa93428a7d3f3fbf3f604abbe56a79' -d 'filter[name]=dev-freq-collection-blueberry'"
-        command = "curl -X GET 'https://api.newrelic.com/v2/servers.json' -H 'X-Api-Key:5209987e383b241f4958ff40652fb88dc69b81526febbe9' -d 'filter[name]=test-stack4-magic2'"
+        command = "curl -X GET 'https://api.newrelic.com/v2/servers.json' -H 'X-Api-Key:5209987e383b241f4958ff40652fb88dc69b81526febbe9' -d 'filter[name]=#{node[:opsworks][:stack][:name]}'"
         command_out = shell_out(command)
         json = command_out.stdout
         obj = JSON.parse(json)
@@ -63,10 +63,13 @@ ruby_block "add the server id to the associated policy list" do
         command_out = shell_out(command)
         json = command_out.stdout
         obj = JSON.parse(json)
-#        does olicy exist?
+#        does policy exist?
         if obj['alert_policies'].size > 0
             num_servers = obj['alert_policies'][0]['links']['servers'].size;
-            Chef::Log.info("******** policies: #{obj} #{num_servers}")
+            obj['alert_policies'][0]['links']['servers'].each_with_index do |server, index|
+                 Chef::Log.info("******** serverId: #{server}")
+            end
+           
         end
 #       add server id to list of servers
 #       post JSON back to newrelic
