@@ -62,7 +62,7 @@ ruby_block "add the server id to the associated policy list" do
         if obj["servers"].size > 0
             obj['servers'].each_with_index do |server, index|
                 Chef::Log.info("******** serverId: #{server['id']} #{server['name']}")
-                if server['name'] == node[:opsworks][:stack][:name]} + '-' + #{node[:opsworks][:instance][:hostname]
+                if server['name'] == node[:opsworks][:stack][:name] + '-' + node[:opsworks][:instance][:hostname]
                     server_id = server['id'];
                 end
             end
