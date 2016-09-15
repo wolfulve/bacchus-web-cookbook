@@ -28,6 +28,7 @@ ruby_block "add the server id to the associated policy list" do
                 if server['name'] == node[:opsworks][:stack][:name] + '-' + node[:opsworks][:instance][:hostname]
                     server_id = server['id'];
                 end
+                break if server_id > -1
             end
             if server_id != -1
                 Chef::Log.info("******** serverId: #{server_id}")
@@ -66,12 +67,12 @@ ruby_block "add the server id to the associated policy list" do
                     command = "curl -X PUT 'https://api.newrelic.com/v2/alert_policies/#{policy_id}.json' -H 'X-Api-Key:5209987e383b241f4958ff40652fb88dc69b81526febbe9' -H 'Content-Type: application/json' -d '#{update_policy}'"
                     command_out = shell_out(command)
                     Chef::Log.info("******** curl command: curl -X PUT 'https://api.newrelic.com/v2/alert_policies/#{policy_id}.json' -H 'X-Api-Key:5209987e383b241f4958ff40652fb88dc69b81526febbe9' -H 'Content-Type: application/json' -d '#{update_policy}'")
-                    else
+                else
                     Chef::Log.info("*** No Server Policy #{node[:opsworks][:stack][:name]} not found")
                 end
-            end
+#            end
             else
-            Chef::Log.info("*** No matching server found for: #{node[:opsworks][:stack][:name]}")
+                Chef::Log.info("*** No matching server found for: #{node[:opsworks][:stack][:name]}")
         end
     end
     action :create
