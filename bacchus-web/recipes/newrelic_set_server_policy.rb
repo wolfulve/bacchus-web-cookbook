@@ -9,7 +9,7 @@
 #
 require 'json'
 
-ruby_block "add the server id to the associated policy list" do
+ruby_block "add the server id to the associated policy" do
     block do
         Chef::Resource::RubyBlock.send(:include, Chef::Mixin::ShellOut)
         # get server
@@ -68,7 +68,7 @@ ruby_block "add the server id to the associated policy list" do
                    command_out = shell_out(command)
                    Chef::Log.info("******** curl command: curl -X PUT 'https://api.newrelic.com/v2/alert_policies/#{policy_id}.json' -H 'X-Api-Key:5209987e383b241f4958ff40652fb88dc69b81526febbe9' -H 'Content-Type: application/json' -d '#{update_policy}'")
                else
-                    Chef::Log.info("*** No Server Policy #{node[:opsworks][:stack][:name]} not found")
+                    Chef::Log.info("*** No Server Policy #{node[:opsworks][:stack][:name]} found")
                end
            end
         else
