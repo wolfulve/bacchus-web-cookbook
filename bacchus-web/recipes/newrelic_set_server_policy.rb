@@ -70,7 +70,7 @@ ruby_block "add the server id to the associated policy list" do
                 else
                     Chef::Log.info("*** No Server Policy #{node[:opsworks][:stack][:name]} not found")
                 end
-#            end
+            end
             else
                 Chef::Log.info("*** No matching server found for: #{node[:opsworks][:stack][:name]}")
         end
