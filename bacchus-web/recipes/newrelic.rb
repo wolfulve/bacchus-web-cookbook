@@ -90,9 +90,9 @@ ruby_block "add the server id to the associated policy list" do
                              Chef::Log.info("******** server id assoicated with policy: #{server_id}")
                         end
                     # build JSON here
-                    command = "curl -X POST 'https://api.newrelic.com/v2/alert_policies/#{policy_id}' -H 'X-Api-Key:5209987e383b241f4958ff40652fb88dc69b81526febbe9' -H 'Content-Type: application/json' -d '#{update_policy}'"
+                    command = "curl -X PUT 'https://api.newrelic.com/v2/alert_policies/#{policy_id}.json' -H 'X-Api-Key:5209987e383b241f4958ff40652fb88dc69b81526febbe9' -H 'Content-Type: application/json' -d '#{update_policy}'"
                     command_out = shell_out(command)
-                    Chef::Log.info("******** curl command: curl -X POST 'https://api.newrelic.com/v2/alert_policies/#{policy_id}' -H 'X-Api-Key:5209987e383b241f4958ff40652fb88dc69b81526febbe9' -H 'Content-Type: application/json' -d '#{update_policy}'")
+                    Chef::Log.info("******** curl command: curl -X PUT 'https://api.newrelic.com/v2/alert_policies/#{policy_id}.json' -H 'X-Api-Key:5209987e383b241f4958ff40652fb88dc69b81526febbe9' -H 'Content-Type: application/json' -d '#{update_policy}'")
                     end
                 else
                     Chef::Log.info("*** No Server Policy #{node[:opsworks][:stack][:name]} not found")
