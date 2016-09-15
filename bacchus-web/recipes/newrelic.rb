@@ -55,10 +55,12 @@ ruby_block "add the server id to the associated policy list" do
         command_out = shell_out(command)
         json = command_out.stdout
         obj = JSON.parse(json)
-#       check to see if we got back a server
+        #   check to see if we got back a server
         Chef::Log.info("*** num servers: #{obj['servers'].size}")
         server_id = -1
+        policy_id = -1
         servers = []
+        update_policy = '{"alert_policy": {"links": {"servers": [22918797,23203973]}}}'
         if obj["servers"].size > 0
             obj['servers'].each_with_index do |server, index|
                 Chef::Log.info("******** serverId: #{server['id']} #{server['name']}")
@@ -68,25 +70,29 @@ ruby_block "add the server id to the associated policy list" do
             end
             if server_id != -1
                 Chef::Log.info("******** serverId: #{server_id}")
-    #           get policy info for specified policy name ...
+                #  get policy info for specified policy name ...
                 command = "curl -X GET 'https://api.newrelic.com/v2/alert_policies.json' -H 'X-Api-Key:5209987e383b241f4958ff40652fb88dc69b81526febbe9' -d 'filter[name]=#{node[:opsworks][:stack][:name]}'"
                 command_out = shell_out(command)
                 json = command_out.stdout
                 obj = JSON.parse(json)
-    #           does policy exist?
+                # does policy exist?
                 if obj['alert_policies'].size > 0
-#                    num_servers = obj['alert_policies'][0]['links']['servers'].size;
                     obj['alert_policies'].each_with_index do |policy, index|
                         Chef::Log.info("******** policy name: #{policy['name']}")
                         if policy['name'] == node[:opsworks][:stack][:name]
                             servers = policy['links']['servers']
+                            policy_id = policy['id'];
                         end
                     end
-                    Chef::Log.info("******** servers assigned to policy: #{servers}")
+                    Chef::Log.info("******** servers assigned to policy: #{servers} policy id: #{policy_id}")
                     if servers.size > 0
                         servers.each_with_index do |server_id, index|
                              Chef::Log.info("******** server id assoicated with policy: #{server_id}")
                         end
+                    # build JSON here
+#                    command = "curl -X POST 'https://api.newrelic.com/v2/alert_policies/#{policy_id}' -H 'X-Api-Key:5209987e383b241f4958ff40652fb88dc69b81526febbe9' -H 'Content-Type: application/json' -d '#{update_policy}'"
+#                    command_out = shell_out(command)
+                    Chef::Log.info("******** curl command: curl -X POST 'https://api.newrelic.com/v2/alert_policies/#{policy_id}' -H 'X-Api-Key:5209987e383b241f4958ff40652fb88dc69b81526febbe9' -H 'Content-Type: application/json' -d '#{update_policy}'")
                     end
                 else
                     Chef::Log.info("*** No Server Policy #{node[:opsworks][:stack][:name]} not found")
