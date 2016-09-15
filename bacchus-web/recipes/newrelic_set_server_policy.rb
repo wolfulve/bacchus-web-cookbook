@@ -14,8 +14,7 @@ ruby_block "add the server id to the associated policy list" do
         Chef::Resource::RubyBlock.send(:include, Chef::Mixin::ShellOut)
         # get server
         command = "curl -X GET 'https://api.newrelic.com/v2/servers.json' -H 'X-Api-Key:5209987e383b241f4958ff40652fb88dc69b81526febbe9' -d 'filter[name]=#{node[:opsworks][:stack][:name]}-#{node[:opsworks][:instance][:hostname]}'"
-        command_out = shell_out(command)
-        json = command_out.stdout
+        json = shell_out(command).stdout
         obj = JSON.parse(json)
         Chef::Log.info("*** num servers: #{obj['servers'].size}")
         server_id = -1
@@ -34,8 +33,7 @@ ruby_block "add the server id to the associated policy list" do
                Chef::Log.info("******** serverId: #{server_id}")
                #  get policy info for specified policy name ...
                command = "curl -X GET 'https://api.newrelic.com/v2/alert_policies.json' -H 'X-Api-Key:5209987e383b241f4958ff40652fb88dc69b81526febbe9' -d 'filter[name]=#{node[:opsworks][:stack][:name]}'"
-               command_out = shell_out(command)
-               json = command_out.stdout
+               json = shell_out(command).stdout
                obj = JSON.parse(json)
                # does policy exist?
                if obj['alert_policies'].size > 0
@@ -65,10 +63,10 @@ ruby_block "add the server id to the associated policy list" do
                    update_policy['*'] = s_ids
                    Chef::Log.info("******** server ids to PUT back: #{s_ids}")
                    command = "curl -X PUT 'https://api.newrelic.com/v2/alert_policies/#{policy_id}.json' -H 'X-Api-Key:5209987e383b241f4958ff40652fb88dc69b81526febbe9' -H 'Content-Type: application/json' -d '#{update_policy}'"
-                   command_out = shell_out(command)
+#                   command_out = shell_out(command)
                    Chef::Log.info("******** curl command: curl -X PUT 'https://api.newrelic.com/v2/alert_policies/#{policy_id}.json' -H 'X-Api-Key:5209987e383b241f4958ff40652fb88dc69b81526febbe9' -H 'Content-Type: application/json' -d '#{update_policy}'")
-                   else
-                   Chef::Log.info("*** No Server Policy #{node[:opsworks][:stack][:name]} not found")
+               else
+                    Chef::Log.info("*** No Server Policy #{node[:opsworks][:stack][:name]} not found")
                end
            end
         else
