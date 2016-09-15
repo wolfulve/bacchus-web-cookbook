@@ -75,13 +75,17 @@ ruby_block "add the server id to the associated policy list" do
                 json = command_out.stdout
                 obj = JSON.parse(json)
     #           does policy exist?
-                if obj['alert_policies'].size == 1
-                    num_servers = obj['alert_policies'][0]['links']['servers'].size;
-                    obj['alert_policies'][0]['links']['servers'].each_with_index do |server, index|
-                         Chef::Log.info("******** serverId: #{server}")
+                if obj['alert_policies'].size > 0
+#                    num_servers = obj['alert_policies'][0]['links']['servers'].size;
+                    obj['alert_policies'].each_with_index do |policy, index|
+                        Chef::Log.info("******** policy name: #{policy['name']}")
+                        if policy['name'] == node[:opsworks][:stack][:name]
+                            servers = policy['links']['servers']
+                        end
                     end
+                    Chef::Log.info("******** servers assigned to policy: #{servers}")
                 else
-                    Chef::Log.info("*** No Server Policy found for server: #{node[:opsworks][:stack][:name]}")
+                    Chef::Log.info("*** No Server Policy #{node[:opsworks][:stack][:name]} not found")
                 end
             end
         else
