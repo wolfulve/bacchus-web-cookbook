@@ -83,6 +83,11 @@ ruby_block "add the server id to the associated policy list" do
                         end
                     end
                     Chef::Log.info("******** servers assigned to policy: #{servers}")
+                    if servers.size > 0
+                        servers.each_with_index do |server_id, index|
+                             Chef::Log.info("******** server id assoicated with policy: #{server_id}")
+                        end
+                    end
                 else
                     Chef::Log.info("*** No Server Policy #{node[:opsworks][:stack][:name]} not found")
                 end
