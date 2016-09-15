@@ -88,14 +88,14 @@ ruby_block "add the server id to the associated policy list" do
                     already_in_list = 0
                     servers.each_with_index do |s_id, index|
                         Chef::Log.info("******** server id assoicated with policy: #{s_id}")
-                        s_ids += s_id + ','
+                        s_ids += s_id.to_s + ','
                         if s_id == server_id
                              Chef::Log.info("******** server id already in list")
                             already_in_list = 1
                         end
                     end
                     if already_in_list == 0
-                        s_ids += server_id
+                        s_ids += server_id.to_s
                     else
                         s_ids.slice!(s_ids.length-1,s_ids.length)
                     end
