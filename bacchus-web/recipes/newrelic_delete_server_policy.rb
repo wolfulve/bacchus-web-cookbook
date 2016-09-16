@@ -48,20 +48,23 @@ ruby_block "add the server id to the associated policy" do
                     end
                     Chef::Log.info("******** servers assigned to policy: #{servers} policy id: #{policy_id}")
                     s_ids = '';
+                    in_list = 0
                     servers.each_with_index do |s_id, index|
                         Chef::Log.info("******** server id assoicated with policy: #{s_id}")
                         if s_id != server_id
                             s_ids += s_id.to_s + ','
+                        else
+                            in_list = 1
                         end
                     end
-#                    if s_ids.length > 0
+                    if in_list == 1
                         s_ids.slice!(s_ids.length-1,s_ids.length)
                         update_policy['*'] = s_ids
                         Chef::Log.info("******** server ids to PUT back: #{s_ids}")
                         command = "curl -X PUT 'https://api.newrelic.com/v2/alert_policies/#{policy_id}.json' -H 'X-Api-Key:5209987e383b241f4958ff40652fb88dc69b81526febbe9' -H 'Content-Type: application/json' -d '#{update_policy}'"
                         command_out = shell_out(command)
                         Chef::Log.info("******** curl command: curl -X PUT 'https://api.newrelic.com/v2/alert_policies/#{policy_id}.json' -H 'X-Api-Key:5209987e383b241f4958ff40652fb88dc69b81526febbe9' -H 'Content-Type: application/json' -d '#{update_policy}'")
-#                    end
+                    end
                 else
                 Chef::Log.info("*** No Server Policy #{node[:opsworks][:stack][:name]} found")
             end
