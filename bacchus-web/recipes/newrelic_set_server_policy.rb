@@ -48,30 +48,40 @@ ruby_block "add the server id to the associated policy" do
                     end
                     Chef::Log.info("******** servers assigned to policy: #{servers} policy id: #{policy_id}")
                     s_ids = '';
-                    already_in_list = 0
+                    in_list = 0
                     servers.each_with_index do |s_id, index|
                         Chef::Log.info("******** server id assoicated with policy: #{s_id}")
                         s_ids += s_id.to_s + ','
                         if s_id == server_id
                             Chef::Log.info("******** server id already in list")
-                            already_in_list = 1
+                            in_list = 1
                         end
                     end
-                    if already_in_list == 0
+                    
+                    if s_ids.length == 0
                         s_ids += server_id.to_s
-                    else
+                    else if in_list == 0
                         s_ids.slice!(s_ids.length-1,s_ids.length)
                     end
-                    update_policy['*'] = s_ids
-                    Chef::Log.info("******** server ids to PUT back: #{s_ids}")
-                    command = "curl -X PUT 'https://api.newrelic.com/v2/alert_policies/#{policy_id}.json' -H 'X-Api-Key:5209987e383b241f4958ff40652fb88dc69b81526febbe9' -H 'Content-Type: application/json' -d '#{update_policy}'"
-                    command_out = shell_out(command)
-                    Chef::Log.info("******** curl command: curl -X PUT 'https://api.newrelic.com/v2/alert_policies/#{policy_id}.json' -H 'X-Api-Key:5209987e383b241f4958ff40652fb88dc69b81526febbe9' -H 'Content-Type: application/json' -d '#{update_policy}'")
-                    else
-                    Chef::Log.info("*** No Server Policy #{node[:opsworks][:stack][:name]} found")
+#                    
+#                    if in_list == 0
+#                        s_ids += server_id.to_s
+#                    else
+#                        s_ids.slice!(s_ids.length-1,s_ids.length)
+#                    end
+
+                    if s_ids.length > 0 && in_list == 0
+                        update_policy['*'] = s_ids
+                        Chef::Log.info("******** server ids to PUT back: #{s_ids}")
+                        command = "curl -X PUT 'https://api.newrelic.com/v2/alert_policies/#{policy_id}.json' -H 'X-Api-Key:5209987e383b241f4958ff40652fb88dc69b81526febbe9' -H 'Content-Type: application/json' -d '#{update_policy}'"
+                        command_out = shell_out(command)
+                        Chef::Log.info("******** curl command: curl -X PUT 'https://api.newrelic.com/v2/alert_policies/#{policy_id}.json' -H 'X-Api-Key:5209987e383b241f4958ff40652fb88dc69b81526febbe9' -H 'Content-Type: application/json' -d '#{update_policy}'")
+                    end
+                else
+                        Chef::Log.info("*** No Server Policy #{node[:opsworks][:stack][:name]} found")
                 end
-            end
-            else
+        end
+        else
             Chef::Log.info("*** No matching server found for: #{node[:opsworks][:stack][:name]}")
         end
     end
