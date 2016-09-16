@@ -60,7 +60,7 @@ ruby_block "add the server id to the associated policy" do
                     
                     if s_ids.length == 0
                         s_ids += server_id.to_s
-                    elseif in_list == 0
+                    elsif in_list == 0
                         s_ids.slice!(s_ids.length-1,s_ids.length)
                     end
 #                    
