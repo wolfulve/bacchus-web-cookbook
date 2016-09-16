@@ -48,18 +48,18 @@ ruby_block "add the server id to the associated policy" do
                     end
                     Chef::Log.info("******** servers assigned to policy: #{servers} policy id: #{policy_id}")
                     s_ids = '';
-                    already_in_list = 0
+                    in_list = 0
                     servers.each_with_index do |s_id, index|
                         Chef::Log.info("******** server id assoicated with policy: #{s_id}")
                         if s_id == server_id
                             Chef::Log.info("******** server id already in list")
-                            already_in_list = 1
-                            break if already_in_list == 1
+                            in_list = 1
+                            break if in_list == 1
                         else
                             s_ids += s_id.to_s + ','
                         end
                     end
-                    if already_in_list == 0
+                    if in_list == 0
                         s_ids.slice!(s_ids.length-1,s_ids.length)
                         update_policy['*'] = s_ids
                         Chef::Log.info("******** server ids to PUT back: #{s_ids}")
