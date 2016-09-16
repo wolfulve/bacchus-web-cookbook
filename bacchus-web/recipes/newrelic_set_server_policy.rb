@@ -56,24 +56,11 @@ ruby_block "add the server id to the associated policy" do
                             Chef::Log.info("******** server id already in list")
                             in_list = 1
                         end
+                        break if in_list == 1
                     end
                     
-#                    if s_ids.length == 0
-#                        s_ids += server_id.to_s
-#                    elsif in_list == 0
-#                        s_ids += server_id.to_s
-#                        s_ids.slice!(s_ids.length-1,s_ids.length)
-#                    else
-#                        s_ids.slice!(s_ids.length-1,s_ids.length)
-#                    end
-#
                     if in_list == 0
                         s_ids += server_id.to_s
-                    else
-                        s_ids.slice!(s_ids.length-1,s_ids.length)
-                    end
-
-                    if s_ids.length > 0 && in_list == 0
                         update_policy['*'] = s_ids
                         Chef::Log.info("******** server ids to PUT back: #{s_ids}")
                         command = "curl -X PUT 'https://api.newrelic.com/v2/alert_policies/#{policy_id}.json' -H 'X-Api-Key:5209987e383b241f4958ff40652fb88dc69b81526febbe9' -H 'Content-Type: application/json' -d '#{update_policy}'"
