@@ -56,6 +56,7 @@ ruby_block "add the server id to the associated policy" do
                             in_list = 1
                             break if in_list == 1
                         else
+                            Chef::Log.info("******** s_id: #{s_id}")
                             s_ids += s_id.to_s + ','
                         end
                     end
