@@ -9,11 +9,13 @@
 #
 require 'json'
 
+api_key = '5209987e383b241f4958ff40652fb88dc69b81526febbe9'
+
 ruby_block "add the server id to the associated policy" do
     block do
         Chef::Resource::RubyBlock.send(:include, Chef::Mixin::ShellOut)
         # get server
-        command = "curl -X GET 'https://api.newrelic.com/v2/servers.json' -H 'X-Api-Key:5209987e383b241f4958ff40652fb88dc69b81526febbe9' -d 'filter[name]=#{node[:opsworks][:stack][:name]}-#{node[:opsworks][:instance][:hostname]}'"
+        command = "curl -X GET 'https://api.newrelic.com/v2/servers.json' -H 'X-Api-Key:#{api_key}' -d 'filter[name]=#{node[:opsworks][:stack][:name]}-#{node[:opsworks][:instance][:hostname]}'"
         command_out = shell_out(command)
         json = command_out.stdout
         obj = JSON.parse(json)
@@ -33,15 +35,15 @@ ruby_block "add the server id to the associated policy" do
             if server_id != -1
                 Chef::Log.info("******** serverId: #{server_id}")
                 #  get policy info for specified policy name ...
-                command = "curl -X GET 'https://api.newrelic.com/v2/alert_policies.json' -H 'X-Api-Key:5209987e383b241f4958ff40652fb88dc69b81526febbe9' -d 'filter[name]=#{node[:opsworks][:stack][:name]}'"
+                command = "curl -X GET 'https://api.newrelic.com/v2/alert_policies.json' -H 'X-Api-Key:#{api_key}' -d 'filter[name]=#{node[:opsworks][:stack][:name]}'"
                 command_out = shell_out(command)
                 json = command_out.stdout
                 obj = JSON.parse(json)
                 # does policy exist?
                 if obj['alert_policies'].size > 0
                     obj['alert_policies'].each_with_index do |policy, index|
-                        Chef::Log.info("******** policy name: #{policy['name']}")
-                        if policy['name'] == node[:opsworks][:stack][:name]
+                        Chef::Log.info("******** policy name: #{policy['name']} id: #{policy['id']}")
+                        if policy['name'].downcase == node[:opsworks][:stack][:name].downcase && policy['type'] == 'server'
                             servers = policy['links']['servers']
                             policy_id = policy['id'];
                         end
@@ -63,15 +65,15 @@ ruby_block "add the server id to the associated policy" do
                         s_ids += server_id.to_s
                         update_policy['*'] = s_ids
                         Chef::Log.info("******** server ids to PUT back: #{s_ids}")
-                        command = "curl -X PUT 'https://api.newrelic.com/v2/alert_policies/#{policy_id}.json' -H 'X-Api-Key:5209987e383b241f4958ff40652fb88dc69b81526febbe9' -H 'Content-Type: application/json' -d '#{update_policy}'"
+                        command = "curl -X PUT 'https://api.newrelic.com/v2/alert_policies/#{policy_id}.json' -H 'X-Api-Key:#{api_key}' -H 'Content-Type: application/json' -d '#{update_policy}'"
                         command_out = shell_out(command)
-                        Chef::Log.info("******** curl command: curl -X PUT 'https://api.newrelic.com/v2/alert_policies/#{policy_id}.json' -H 'X-Api-Key:5209987e383b241f4958ff40652fb88dc69b81526febbe9' -H 'Content-Type: application/json' -d '#{update_policy}'")
+                        #                        Chef::Log.info("******** curl command: curl -X PUT 'https://api.newrelic.com/v2/alert_policies/#{policy_id}.json' -H 'X-Api-Key:b45db701025ac3714fa93428a7d3f3fbf3f604abbe56a79' -H 'Content-Type: application/json' -d '#{update_policy}'")
                     end
-                else
-                        Chef::Log.info("*** No Server Policy #{node[:opsworks][:stack][:name]} found")
+                    else
+                    Chef::Log.info("*** No Server Policy #{node[:opsworks][:stack][:name]} found")
                 end
-        end
-        else
+            end
+            else
             Chef::Log.info("*** No matching server found for: #{node[:opsworks][:stack][:name]}")
         end
     end
