@@ -29,7 +29,7 @@ ruby_block "add the server id to the associated policy" do
                   
                     if app_name != ''
                         Chef::Log.info("******** appname: #{app_name}")
-                        command = "curl -X GET 'https://api.newrelic.com/v2/alert_policies.json' -H 'X-Api-Key:#{api_key}' -d 'filter[name]=#{node[:opsworks][:stack][:name]}-#{app_name}'"
+                        command = "curl -X GET 'https://api.newrelic.com/v2/alert_policies.json' -H 'X-Api-Key:#{api_key}' -d 'filter[name]=#{app_name}'"
                         command_out = shell_out(command)
                         json = command_out.stdout
                         obj = JSON.parse(json)
@@ -45,7 +45,7 @@ ruby_block "add the server id to the associated policy" do
                             end
                             
                             # call API to get applications and match by exact name (have to iterate because of name substring matches,  save app ID
-                            command = "curl -X GET 'https://api.newrelic.com/v2/applications.json' -H 'X-Api-Key:#{api_key}' -d 'filter[name]=#{node[:opsworks][:stack][:name]}-#{app_name}'"
+                            command = "curl -X GET 'https://api.newrelic.com/v2/applications.json' -H 'X-Api-Key:#{api_key}' -d 'filter[name]=#{app_name}'"
                             command_out = shell_out(command)
                             json = command_out.stdout
                             obj = JSON.parse(json)
