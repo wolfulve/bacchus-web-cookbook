@@ -23,7 +23,7 @@ ruby_block "add the application id to the associated policy" do
         
         node["opsworks"]["applications"].each_with_index do |application, index|
             Chef::Log.info("******** Application: #{application[:name]}, type: #{application[:application_type]} (#{index+1}/#{node[:opsworks][:applications].size})")
-            if application[:application_type] == 'java'
+#            if application[:application_type] == 'java'
                     app_name = node[:opsworks][:stack][:name] + '-' + application[:name];
                   
                     if app_name != ''
@@ -82,7 +82,7 @@ ruby_block "add the application id to the associated policy" do
                                 end
                             end
                     end
-                end
+#                end
             end
         end
 
