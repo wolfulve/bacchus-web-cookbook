@@ -33,6 +33,7 @@ ruby_block "add the server id to the associated policy" do
                         command_out = shell_out(command)
                         json = command_out.stdout
                         obj = JSON.parse(json)
+                        Chef::Log.info("******** matching policies: #{obj['alert_policies'].size}")
                         if obj['alert_policies'].size > 0
                             obj['alert_policies'].each_with_index do |policy, index|
                                 Chef::Log.info("******** policy name: #{policy['name']} id: #{policy['id']}")
