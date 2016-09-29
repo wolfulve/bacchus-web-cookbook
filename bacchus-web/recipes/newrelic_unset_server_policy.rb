@@ -35,7 +35,7 @@ ruby_block "remove the application id from the associated policy" do
             if server_id != -1
                 Chef::Log.info("******** serverId: #{server_id}")
                 #  get policy info for specified policy name ...
-                command = "curl -X GET 'https://api.newrelic.com/v2/alert_policies.json' -H 'X-Api-Key:#{api_key}' -d 'filter[name]=#{node[:opsworks][:stack][:name]}'"
+                command = "curl -X GET 'https://api.newrelic.com/v2/alert_policies.json' -H 'X-Api-Key:#{api_key}' -d 'filter[name]=#{node[:opsworks][:stack][:name]}&filter[type]=server'"
                 command_out = shell_out(command)
                 json = command_out.stdout
                 obj = JSON.parse(json)

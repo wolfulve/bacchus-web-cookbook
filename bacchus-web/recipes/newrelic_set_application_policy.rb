@@ -28,7 +28,7 @@ ruby_block "add the application id to the associated policy" do
                   
                     if app_name != ''
                         Chef::Log.info("******** appname: #{app_name}")
-                        command = "curl -X GET 'https://api.newrelic.com/v2/alert_policies.json' -H 'X-Api-Key:#{api_key}' -d 'filter[name]=#{app_name}'"
+                        command = "curl -X GET 'https://api.newrelic.com/v2/alert_policies.json' -H 'X-Api-Key:#{api_key}' -d 'filter[name]=#{app_name}&filter[type]=application'"
                         command_out = shell_out(command)
                         json = command_out.stdout
                         obj = JSON.parse(json)
