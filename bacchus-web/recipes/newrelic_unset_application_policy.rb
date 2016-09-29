@@ -64,12 +64,11 @@ ruby_block "add the server id to the associated policy" do
                                 in_list = 0
                                 applications.each_with_index do |a_id, index|
                                     Chef::Log.info("******** app id assoicated with policy: #{a_id}")
-                                    a_ids += a_id.to_s + ','
-                                    if a_id == app_id
-                                        Chef::Log.info("******** app id already in list")
+                                    if a_id != app_id
+                                        a_ids += a_id.to_s + ','
+                                    else
                                         in_list = 1
                                     end
-                                    break if in_list == 1
                                 end
                                 # send update if needed
                                 if in_list == 1
