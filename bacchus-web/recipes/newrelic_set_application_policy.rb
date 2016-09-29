@@ -11,11 +11,10 @@ require 'json'
 
 api_key = '5209987e383b241f4958ff40652fb88dc69b81526febbe9'
 
-ruby_block "add the server id to the associated policy" do
+ruby_block "add the application id to the associated policy" do
     block do
         Chef::Resource::RubyBlock.send(:include, Chef::Mixin::ShellOut)
 
-        server_id = -1
         policy_id = -1
         applications = []
         app_name = ''

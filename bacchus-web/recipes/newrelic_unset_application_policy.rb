@@ -15,7 +15,6 @@ ruby_block "add the server id to the associated policy" do
     block do
         Chef::Resource::RubyBlock.send(:include, Chef::Mixin::ShellOut)
         
-        server_id = -1
         policy_id = -1
         applications = []
         app_name = ''
