@@ -19,7 +19,8 @@ ruby_block "add the server id to the associated policy" do
         policy_id = -1
         applications = []
         app_name = ''
-        update_policy = '{"alert_policy": {"links": {"servers": [*]}}}'
+        app_id = -1
+        update_policy = '{"alert_policy": {"links": {"applications": [*]}}}'
         
         node["opsworks"]["applications"].each_with_index do |application, index|
             Chef::Log.info("******** Application: #{application[:name]}, type: #{application[:application_type]} (#{index+1}/#{node[:opsworks][:applications].size})")
@@ -40,6 +41,37 @@ ruby_block "add the server id to the associated policy" do
                                     Chef::Log.info("******** found application policy for app")
                                 end
                             end
+                            
+                            # call API to get applications and match by exact name (have to iterate because of name substring matches,  save app ID
+                            command = "curl -X GET 'https://api.newrelic.com/v2/applications.json.json' -H 'X-Api-Key:#{api_key}' -d 'filter[name]=#{node[:opsworks][:stack][:name]}-#{app_name}'"
+                            command_out = shell_out(command)
+                            json = command_out.stdout
+                            obj = JSON.parse(json)
+                            obj['applications'].each_with_index do |app, index|
+                                Chef::Log.info("******** app name: #{app['name']} id: #{app['id']}")
+                                if app['name'].downcase == app_name.downcase
+                                    app_id = app['id'];
+                                    Chef::Log.info("******** appId: #{app_id}")
+                                end
+                            end
+
+
+                            if app_id != -1
+                                Chef::Log.info("******** applications assigned to policy: #{applications} policy id: #{policy_id}")
+                                a_ids = '';
+                                in_list = 0
+                                applications.each_with_index do |a_id, index|
+                                    Chef::Log.info("******** app id assoicated with policy: #{a_id}")
+                                    a_ids += a_id.to_s + ','
+                                    if a_id == app_id
+                                        Chef::Log.info("******** app id already in list")
+                                        in_list = 1
+                                    end
+                                    break if in_list == 1
+                                end
+                                # send update if needed
+                            end
+
 
                     end
         
