@@ -26,8 +26,9 @@ ruby_block "add the server id to the associated policy" do
             Chef::Log.info("******** Application: #{application[:name]}, type: #{application[:application_type]} (#{index+1}/#{node[:opsworks][:applications].size})")
             if application[:application_type] == 'java'
                     app_name = node[:opsworks][:stack][:name] + '-' + application[:name];
-                     Chef::Log.info("******** appname: #{app_name}")
+                  
                     if app_name != ''
+                        Chef::Log.info("******** appname: #{app_name}")
                         command = "curl -X GET 'https://api.newrelic.com/v2/alert_policies.json' -H 'X-Api-Key:#{api_key}' -d 'filter[name]=#{node[:opsworks][:stack][:name]}-#{app_name}'"
                         command_out = shell_out(command)
                         json = command_out.stdout
