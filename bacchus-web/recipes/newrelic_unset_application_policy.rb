@@ -75,7 +75,7 @@ ruby_block "add the server id to the associated policy" do
                                 if in_list == 1
                                     a_ids.slice!(a_ids.length-1,a_ids.length)
                                     update_policy['*'] = a_ids
-                                    Chef::Log.info("******** app ids to PUT back: #{s_ids}")
+                                    Chef::Log.info("******** app ids to PUT back: #{a_ids}")
                                     command = "curl -X PUT 'https://api.newrelic.com/v2/alert_policies/#{policy_id}.json' -H 'X-Api-Key:#{api_key}' -H 'Content-Type: application/json' -d '#{update_policy}'"
                                     command_out = shell_out(command)
                                     #                        Chef::Log.info("******** curl command: curl -X PUT 'https://api.newrelic.com/v2/alert_policies/#{policy_id}.json' -H 'X-Api-Key:b45db701025ac3714fa93428a7d3f3fbf3f604abbe56a79' -H 'Content-Type: application/json' -d '#{update_policy}'")
