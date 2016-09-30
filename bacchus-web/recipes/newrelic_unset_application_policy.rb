@@ -44,26 +44,27 @@ ruby_block "add the server id to the associated policy" do
                         end
                         
                         if policy_id != -1
-                            #
-                            command = "curl -X GET 'https://api.newrelic.com/v2/hosts.json' -H 'X-Api-Key:#{api_key}' -d 'filter[application_id]=#{policy_id}'"
+                            # call API to get applications and match by exact name (have to iterate because of name substring matches,  save app ID
+                            command = "curl -X GET 'https://api.newrelic.com/v2/applications.json' -H 'X-Api-Key:#{api_key}' -d 'filter[name]=#{app_name}'"
                             command_out = shell_out(command)
                             json = command_out.stdout
                             obj = JSON.parse(json)
-                            # do not remove unless this is this is the last host which has that application policy
-                            if obj['application_hosts'].size == 1
-                                # call API to get applications and match by exact name (have to iterate because of name substring matches,  save app ID
-                                command = "curl -X GET 'https://api.newrelic.com/v2/applications.json' -H 'X-Api-Key:#{api_key}' -d 'filter[name]=#{app_name}'"
-                                command_out = shell_out(command)
-                                json = command_out.stdout
-                                obj = JSON.parse(json)
-                                obj['applications'].each_with_index do |app, index|
-                                    Chef::Log.info("******** app name: #{app['name']} id: #{app['id']}")
-                                    if app['name'].downcase == app_name.downcase
-                                        app_id = app['id'];
-                                        Chef::Log.info("******** appId: #{app_id}")
-                                    end
+                            obj['applications'].each_with_index do |app, index|
+                                Chef::Log.info("******** app name: #{app['name']} id: #{app['id']}")
+                                if app['name'].downcase == app_name.downcase
+                                    app_id = app['id'];
+                                    Chef::Log.info("******** appId: #{app_id}")
                                 end
-                                
+                            end
+                            
+                            # make sure this is the only host that still uses the app polict before removing
+                            command = "curl -X GET 'https://api.newrelic.com/v2/hosts.json' -H 'X-Api-Key:#{api_key}' -d 'filter[application_id]=#{app_id}'"
+                            command_out = shell_out(command)
+                            json = command_out.stdout
+                            obj = JSON.parse(json)
+                            # do not remove unless this is the last host which has that application policy
+                            if obj['application_hosts'].size == 1
+                            
                                 if app_id != -1
                                     Chef::Log.info("******** applications assigned to policy: #{applications} policy id: #{policy_id}")
                                     a_ids = '';
