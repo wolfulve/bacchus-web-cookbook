@@ -44,39 +44,47 @@ ruby_block "add the server id to the associated policy" do
                         end
                         
                         if policy_id != -1
-                            # call API to get applications and match by exact name (have to iterate because of name substring matches,  save app ID
-                            command = "curl -X GET 'https://api.newrelic.com/v2/applications.json' -H 'X-Api-Key:#{api_key}' -d 'filter[name]=#{app_name}'"
+                            #
+                            command = "curl -X GET 'https://api.newrelic.com/v2/hosts.json' -H 'X-Api-Key:#{api_key}' -d 'filter[application_id]=#{policy_id}'"
                             command_out = shell_out(command)
                             json = command_out.stdout
                             obj = JSON.parse(json)
-                            obj['applications'].each_with_index do |app, index|
-                                Chef::Log.info("******** app name: #{app['name']} id: #{app['id']}")
-                                if app['name'].downcase == app_name.downcase
-                                    app_id = app['id'];
-                                    Chef::Log.info("******** appId: #{app_id}")
-                                end
-                            end
-                            
-                            if app_id != -1
-                                Chef::Log.info("******** applications assigned to policy: #{applications} policy id: #{policy_id}")
-                                a_ids = '';
-                                in_list = 0
-                                applications.each_with_index do |a_id, index|
-                                    Chef::Log.info("******** app id assoicated with policy: #{a_id}")
-                                    if a_id != app_id
-                                        a_ids += a_id.to_s + ','
-                                    else
-                                        in_list = 1
+                            # do not remove unless this is this is the last host which has that application policy
+                            if obj['application_hosts'].size == 1
+                                # call API to get applications and match by exact name (have to iterate because of name substring matches,  save app ID
+                                command = "curl -X GET 'https://api.newrelic.com/v2/applications.json' -H 'X-Api-Key:#{api_key}' -d 'filter[name]=#{app_name}'"
+                                command_out = shell_out(command)
+                                json = command_out.stdout
+                                obj = JSON.parse(json)
+                                obj['applications'].each_with_index do |app, index|
+                                    Chef::Log.info("******** app name: #{app['name']} id: #{app['id']}")
+                                    if app['name'].downcase == app_name.downcase
+                                        app_id = app['id'];
+                                        Chef::Log.info("******** appId: #{app_id}")
                                     end
                                 end
-                                # send update if needed
-                                if in_list == 1
-                                    a_ids.slice!(a_ids.length-1,a_ids.length)
-                                    update_policy['*'] = a_ids
-                                    Chef::Log.info("******** app ids to PUT back: #{a_ids}")
-                                    command = "curl -X PUT 'https://api.newrelic.com/v2/alert_policies/#{policy_id}.json' -H 'X-Api-Key:#{api_key}' -H 'Content-Type: application/json' -d '#{update_policy}'"
-                                    command_out = shell_out(command)
-                                    #                        Chef::Log.info("******** curl command: curl -X PUT 'https://api.newrelic.com/v2/alert_policies/#{policy_id}.json' -H 'X-Api-Key:b45db701025ac3714fa93428a7d3f3fbf3f604abbe56a79' -H 'Content-Type: application/json' -d '#{update_policy}'")
+                                
+                                if app_id != -1
+                                    Chef::Log.info("******** applications assigned to policy: #{applications} policy id: #{policy_id}")
+                                    a_ids = '';
+                                    in_list = 0
+                                    applications.each_with_index do |a_id, index|
+                                        Chef::Log.info("******** app id assoicated with policy: #{a_id}")
+                                        if a_id != app_id
+                                            a_ids += a_id.to_s + ','
+                                        else
+                                            in_list = 1
+                                        end
+                                    end
+                                    # send update if needed
+                                    if in_list == 1
+                                        a_ids.slice!(a_ids.length-1,a_ids.length)
+                                        update_policy['*'] = a_ids
+                                        Chef::Log.info("******** app ids to PUT back: #{a_ids}")
+                                        command = "curl -X PUT 'https://api.newrelic.com/v2/alert_policies/#{policy_id}.json' -H 'X-Api-Key:#{api_key}' -H 'Content-Type: application/json' -d '#{update_policy}'"
+                                        command_out = shell_out(command)
+                                        #                        Chef::Log.info("******** curl command: curl -X PUT 'https://api.newrelic.com/v2/alert_policies/#{policy_id}.json' -H 'X-Api-Key:b45db701025ac3714fa93428a7d3f3fbf3f604abbe56a79' -H 'Content-Type: application/json' -d '#{update_policy}'")
+                                    end
                                 end
                             end
                         end
